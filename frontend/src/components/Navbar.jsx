@@ -25,7 +25,7 @@ export default function Navbar(){
                     <div className="h-0.75 w-7 bg-[#3f454c]"></div>
                 </div>
                
-                <h1 className="hidden font-bold text-3xl ml-7 text-[#3f454c] sm:block">LOGO</h1>
+                <h1 className="hidden font-bold text-3xl ml-7 text-[#3f454c] sm:block">IPSUM</h1>
                 <div className="flex row gap-8 justify-center items-center sm:mr-7 mr-5">
                     <ul className="flex-row text-[#3f454c] gap-6 font-semibold hidden sm:flex">
                         <li className={`hover:text-[#616975] transition-all cursor-pointer ${location.pathname == '/home' ? 'border-b-2' : 'none' }`}>

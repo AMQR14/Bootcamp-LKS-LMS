@@ -43,7 +43,7 @@ export default function HomeLayout({children}){
                             <div className="h-0.75 w-7 bg-[#3f454c]"></div>
                             <div className="h-0.75 w-7 bg-[#3f454c]"></div>
                         </div>
-                        <h1 className="hidden font-bold text-3xl ml-7 text-[#3f454c] md:block">LOGO</h1>
+                        <h1 className="hidden font-bold text-3xl ml-7 text-[#3f454c] md:block">IPSUM</h1>
                         <div className="flex row gap-8 justify-center items-center sm:mr-7 mr-5">
                             <div className="w-0.5 h-8 bg-[#A3BAC2]"></div>
                             <div className="flex justify-center items-center gap-5">

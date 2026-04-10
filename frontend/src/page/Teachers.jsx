@@ -5,7 +5,7 @@ import Misbah from '../assets/misbah.jpg'
 import { useEffect, useState } from "react"
 
 export default function Teachers(){
-    const [more, setMore] = useState([])
+    const [more, setMore] = useState(false)
     
     const open = () => {
         setMore(!more)
