@@ -9,6 +9,7 @@ class Answer extends Model
 {
     protected $fillable = [
         'question_id',
+        'student_id',
         'answer',
         'is_correct'
     ];
@@ -16,5 +17,10 @@ class Answer extends Model
     public function question(): BelongsTo
     {
         return $this->belongsTo(Question::class);
+    }
+
+    public function student(): BelongsTo
+    {
+        return $this->belongsTo(Student::class);
     }
 }

@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('teachers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id')->constrained();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('workshop_id')->constrained();
+            $table->foreignId('course_id')->nullable()->constrained();
+            $table->foreignId('user_id')->nullable()->constrained();
+            $table->foreignId('workshop_id')->nullable()->constrained();
             $table->string('name');
             $table->string('nip');
             $table->string('nik');
             $table->string('nidn');
             $table->string('email');
             $table->date('date_of_birth');
-            $table->date('joined_at');
+            $table->dateTime('joined_at');
             $table->timestamps();
         });
     }
