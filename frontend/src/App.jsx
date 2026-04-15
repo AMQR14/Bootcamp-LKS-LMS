@@ -17,6 +17,10 @@ import Profile from "./page/Profile"
 import Questions from "./page/Dashboard/Questions"
 import CreateQuestions from "./page/Dashboard/Create/CreateQuestions"
 import EditQuestions from "./page/Dashboard/Edit/EditQuestions"
+import UserDashboard from "./page/Dashboard/UserDashboard"
+import CreateUsers from "./page/Dashboard/Create/CreateUsers"
+import EditUsers from "./page/Dashboard/Edit/EditUsers"
+
 import { AuthProvider } from "./contexts/AuthContext"
 
 function AppRoutes(){
@@ -35,11 +39,14 @@ function AppRoutes(){
       <Route path="/createstudents" element={<CreateStudents/>}/>
       <Route path="/createteachers" element={<CreateTeachers/>}/>
       <Route path="/editstudents" element={<EditStudents/>}/>
-      <Route path="/editteachers" element={<EditTeachers/>}/>
+      <Route path="/editteachers/:id" element={<EditTeachers/>}/>
       <Route path="/profile" element={<Profile/>}/>
       <Route path="/questions" element={<Questions/>} /> 
       <Route path="/createquestions" element={<CreateQuestions/>}/>
       <Route path="/editquestions" element={<EditQuestions/>}/>
+      <Route path="/dashboardusers" element={<UserDashboard/>}/>
+      <Route path="/createusers" element={<CreateUsers/>}/>
+      <Route path="/editusers/:id" element={<EditUsers/>}/>
     </Routes>
   )
 }

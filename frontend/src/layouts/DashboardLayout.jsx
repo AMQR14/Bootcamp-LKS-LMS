@@ -1,7 +1,7 @@
 import Navbar2 from "../components/Navbar2"
 import Footer from "../components/Footer"
 import Sidebar from "../components/Sidebar"
-import {Home, Book, LayoutDashboard, GraduationCap, Users, CircleQuestionMark} from 'lucide-react'
+import {User, Book, LayoutDashboard, GraduationCap, Users, CircleQuestionMark} from 'lucide-react'
 import {Link, useLocation, useNavigate} from 'react-router-dom'
 import { useState } from "react"
 import { useAuth } from "../contexts/AuthContext"
@@ -84,6 +84,13 @@ export default function HomeLayout({children}){
                             <div className={`hover:bg-[#E0E8EB] hover:border-l-8 hover:font-bold h-full w-full transition-all text-[#3f454c] font-semibold py-2 ${location.pathname == '/coursesdashboard' ? 'border-l-8 ' : 'none'}`}>
                                 <div className="flex ml-8 items-center gap-1">
                                     <Book color="#3f454c" size={18}/>Courses
+                                </div>
+                            </div>
+                        </Link>
+                        <Link to={'/dashboardusers'}>
+                            <div className={`hover:bg-[#E0E8EB] hover:border-l-8 hover:font-bold h-full w-full transition-all text-[#3f454c] font-semibold py-2 ${location.pathname == '/dashboardusers' ? 'border-l-8 ' : 'none'}`}>
+                                <div className="flex ml-8 items-center gap-1">
+                                    <User color="#3f454c" size={18}/>Users
                                 </div>
                             </div>
                         </Link>

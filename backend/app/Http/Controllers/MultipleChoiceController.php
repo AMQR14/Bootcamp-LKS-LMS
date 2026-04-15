@@ -2,56 +2,50 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\MultipleChoice;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
-
+class MultipleChoiceController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $users = User::all();
-        // $teacher = User::where('role', 'teacher')->get();
+        $multipleChoices = MultipleChoice::all();
+        
         return response()->json([
             'success'=> true,
             'message'=> 'Success',
-            'users'=> $users
+            'multipleChoices'=> $multipleChoices,
         ]);
     }
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
         $request->validate([
-            'email'=> 'required|email',
-            'password'=> 'required|min:6',
-            'role'=> 'required',
+            'choice_text'=> 'required',
+            'is_correct'=> 'required|boolean',
         ]);
 
         try{
-            $user = User::create([
-                'email'=> $request->email,
-                'password'=> bcrypt($request->email),
-                'role'=> $request->role
+            $multipleChoice = MultipleChoice::create([
+                'choice_text'=> $request->choice_text,
+                'is_correct'=> $request->is_correct,
             ]);
-    
             return response()->json([
                 'success'=> true,
-                'message'=> 'User created',
-                'data'=> $user
+                'message'=> 'multipleChoice created',
+                'multipleChoices'=> $multipleChoice,
             ]);
         }catch(\Exception $e){
             return response()->json([
                 'success'=> false,
-                'message'=> 'Failed to create user',
-            ],500);
+                'message'=> 'multipleChoice failed to be created',
+            ], 500);
         }
-        
     }
 
     /**
@@ -59,18 +53,19 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        $user = User::find($id);
+        $multipleChoice = MultipleChoice::find($id);
 
-        if(!$user){
+        if(!$multipleChoice){
             return response()->json([
-                'message'=> 'User not found'
+                'success'=> false,
+                'message'=> 'multipleChoice not found',
             ], 404);
         }
 
         return response()->json([
             'success'=> true,
             'message'=> 'Success',
-            'user'=> $user
+            'multipleChoice'=> $multipleChoice,
         ]);
     }
 
@@ -79,36 +74,34 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $user = User::find($id);
+        $multipleChoice = MultipleChoice::find($id);
 
-        if(!$user){
+        if(!$multipleChoice){
             return response()->json([
-                'message'=> 'User not found'
+                'success'=> false,
+                'message'=> 'multipleChoice not found',
             ], 404);
         }
 
         $request->validate([
-            'email'=> 'required',
-            'password'=> 'required',
-            'role'=> 'required',
+            'choice_text'=> 'required',
+            'is_correct'=> 'required|boolean',
         ]);
 
         try{
-            $user->update([
-                'email'=> $request->email,
-                'password'=> bcrypt($request->password),
-                'role'=> $request->role
+            $multipleChoice->update([
+                'choice_text'=> $request->choice_text,
+                'is_correct'=> $request->is_correct,
             ]);
-    
             return response()->json([
                 'success'=> true,
-                'message'=> 'User updated',
-                'data'=> $user
+                'message'=> 'multipleChoice updated',
+                'multipleChoices'=> $multipleChoice,
             ]);
         }catch(\Exception $e){
             return response()->json([
                 'success'=> false,
-                'message'=> 'Failed to update user',
+                'message'=> 'multipleChoice failed to be updated',
             ],500);
         }
     }
@@ -118,28 +111,26 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        $user = User::find($id);
+        $multipleChoice = MultipleChoice::find($id);
 
-        if(!$user){
+        if(!$multipleChoice){
             return response()->json([
-                'message'=> 'User not found'
+                'success'=> false,
+                'message'=> 'multipleChoice not found',
             ], 404);
         }
 
         try{
-            $user->student()->delete();
-            $user->teacher()->delete();
-            $user->delete();
-
+            $multipleChoice->delete();
             return response()->json([
                 'success'=> true,
-                'message'=> 'User deleted',
+                'message'=> 'multipleChoice deleted',
             ]);
         }catch(\Exception $e){
             return response()->json([
                 'success'=> false,
-                'message'=> 'Failed to delete user',
-            ],500);
+                'message'=> 'multipleChoice failed to be deleted',
+            ]);
         }
     }
 }

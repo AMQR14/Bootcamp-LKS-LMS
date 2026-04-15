@@ -4,22 +4,32 @@ import {Link} from 'react-router-dom'
 import api from '../../lib/api'
 
 export default function TeachersDashboard(){
-    const [teacher, setTeacher] = useState([])
+    const [teachers, setTeachers] = useState([])
     const [loading, setLoading] = useState(false)
 
-    useEffect(()=>{
-        async function fetchTeachers() {
-            setLoading(true)
-            try{
-                const res = await api.get('/teachers')
-                setTeacher(res.data)
-                console.log(res.data)
-            }finally{
-                setLoading(false)
-            }
+    async function fetchTeachers() {
+        setLoading(true)
+        try{
+            const res = await api.get('/teachers')
+            setTeachers(res.data.teachers)
+            console.log(res.data)
+        }finally{
+            setLoading(false)
         }
+    }
+
+    useEffect(()=>{        
         fetchTeachers()
     }, [])
+
+    async function handleDelete(id) {
+        try{
+            await api.delete(`/teachers/${id}`)
+            fetchTeachers()
+        }finally{
+
+        }
+    }
 
     return (
         <DashboardLayout>
@@ -31,48 +41,47 @@ export default function TeachersDashboard(){
                                 <Link to={'/createteachers'} className='flex justify-center items-center w-24 h-10 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md '>Create</Link>
                             </div>
                         </div>
-                        <div className='my-6 rounded-md border-collapse border-2 overflow-x-auto border-[#A3BAC2]'>
-                            <table className='min-w-200 w-full text-[#3f454c]'>
-                                <thead className=''>
-                                    <tr >
-                                        <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>No</th>
-                                        <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>Name</th>
-                                        <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>NIP</th>
-                                        <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>Class</th>
-                                        <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>Course</th>
-                                        <th className='border-b-2 p-2 border-[#A3BAC2] w-1'>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td className='border-e border-[#A3BAC2] border-b p-2 '>1</td>
-                                        <td className='border-e border-[#A3BAC2] border-b p-2'>Course</td>
-                                        <td className='border-e border-[#A3BAC2] border-b p-2'>Teacher</td>
-                                        <td className='border-e border-[#A3BAC2] border-b p-2'>Class</td>
-                                        <td className='border-e border-[#A3BAC2] border-b p-2'>Date</td>
-                                        <td className='border-b p-2 px-6 border-[#A3BAC2]'>
-                                            <div className="flex justify-center items-center gap-5">
-                                            <Link to={'/editteachers'} className='flex justify-center items-center w-24 h-8 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md'>Edit</Link>
-                                            <button className='flex justify-center items-center w-24 h-8 bg-[#d25252] hover:bg-[#ea5e5e] transition-all text-white font-semibold rounded-md'>Delete</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td className='border-e border-[#A3BAC2] p-2'>2</td>
-                                        <td className='border-e border-[#A3BAC2] p-2'>Course</td>
-                                        <td className='border-e border-[#A3BAC2] p-2'>Teacher</td>
-                                        <td className='border-e border-[#A3BAC2] p-2'>Class</td>
-                                        <td className='border-e border-[#A3BAC2] p-2'>Date</td>
-                                        <td className='border-b p-2 px-6 border-[#A3BAC2]'>
-                                            <div className="flex justify-center items-center gap-5">
-                                            <Link to={'/editteachers'} className='flex justify-center items-center w-24 h-8 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md'>Edit</Link>
-                                            <button className='flex justify-center items-center w-24 h-8 bg-[#d25252] hover:bg-[#ea5e5e] transition-all text-white font-semibold rounded-md'>Delete</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        {
+                            loading ? 
+                            <div>Loading...</div>:
+                            <div className='my-6 rounded-md border-collapse border-2 overflow-x-auto border-[#A3BAC2]'>
+                                <table className='min-w-200 w-full text-[#3f454c]'>
+                                    <thead className=''>
+                                        <tr >
+                                            <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>No</th>
+                                            <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>Name</th>
+                                            <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>Email</th>
+                                            <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>NIP</th>
+                                            <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>NIK</th>
+                                            <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>NIDN</th>
+                                            <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>Date of Birth</th>
+                                            <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>Joined At</th>
+                                            <th className='border-b-2 p-2 border-[#A3BAC2] w-1'>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {teachers.map((teacher, index)=>(
+                                            <tr key={teacher.id}>
+                                                <td className='border-e border-[#A3BAC2] border-b p-2 '>{index+1}</td>
+                                                <td className='border-e border-[#A3BAC2] border-b p-2'>{teacher.name}</td>
+                                                <td className='border-e border-[#A3BAC2] border-b p-2'>{teacher.email}</td>
+                                                <td className='border-e border-[#A3BAC2] border-b p-2'>{teacher.nip}</td>
+                                                <td className='border-e border-[#A3BAC2] border-b p-2'>{teacher.nik}</td>
+                                                <td className='border-e border-[#A3BAC2] border-b p-2'>{teacher.nidn}</td>
+                                                <td className='border-e border-[#A3BAC2] border-b p-2'>{teacher.date_of_birth}</td>
+                                                <td className='border-e border-[#A3BAC2] border-b p-2'>{teacher.joined_at}</td>
+                                                <td className='border-b p-2 px-6 border-[#A3BAC2]'>
+                                                    <div className="flex justify-center items-center gap-5">
+                                                        <Link to={`/editteachers/${teacher.id}`} className='flex justify-center items-center w-24 h-8 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md'>Edit</Link>
+                                                        <button className='flex justify-center items-center w-24 h-8 bg-[#d25252] hover:bg-[#ea5e5e] transition-all text-white font-semibold rounded-md' onClick={()=> handleDelete(teacher.id)}>Delete</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
                     </div>
                 </main>
         </DashboardLayout>

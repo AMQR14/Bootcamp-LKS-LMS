@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('course_files', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id')->constrained();
-            $table->foreignId('uploaded_by')->constrained('users');
+            $table->foreignId('course_id')->nullable()->constrained();
+            $table->foreignId('uploaded_by')->nullable()->constrained('users');
             $table->string('file_name');
             $table->text('file_path');
             $table->boolean('is_available');

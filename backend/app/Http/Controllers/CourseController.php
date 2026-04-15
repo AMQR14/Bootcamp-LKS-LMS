@@ -2,23 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Course;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
-
+class CourseController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $users = User::all();
-        // $teacher = User::where('role', 'teacher')->get();
+        $courses = Course::all();
+
         return response()->json([
             'success'=> true,
             'message'=> 'Success',
-            'users'=> $users
+            'courses'=> $courses,
         ]);
     }
 
@@ -28,30 +27,26 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'email'=> 'required|email',
-            'password'=> 'required|min:6',
-            'role'=> 'required',
+            'name'=> 'required',
         ]);
 
-        try{
-            $user = User::create([
-                'email'=> $request->email,
-                'password'=> bcrypt($request->email),
-                'role'=> $request->role
+       try{
+            $courses = Course::create([
+                'name'=> $request->name,
+                'workshop_id'=> $request->workshop_id
             ]);
-    
+
             return response()->json([
                 'success'=> true,
-                'message'=> 'User created',
-                'data'=> $user
+                'message'=> 'Course created',
+                'courses'=> $courses,
             ]);
         }catch(\Exception $e){
             return response()->json([
                 'success'=> false,
-                'message'=> 'Failed to create user',
-            ],500);
+                'message'=> 'Course failed to be created',
+            ], 500);
         }
-        
     }
 
     /**
@@ -59,19 +54,20 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        $user = User::find($id);
+        $course = Course::find($id);
 
-        if(!$user){
+        if(!$course){
             return response()->json([
-                'message'=> 'User not found'
+                'success'=> false,
+                'message'=> 'Course not found',
             ], 404);
         }
 
         return response()->json([
-            'success'=> true,
-            'message'=> 'Success',
-            'user'=> $user
-        ]);
+                'success'=> true,
+                'message'=> 'Success',
+                'course'=> $course
+            ]);
     }
 
     /**
@@ -79,37 +75,36 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $user = User::find($id);
+        $course = Course::find($id);
 
-        if(!$user){
+        if(!$course){
             return response()->json([
-                'message'=> 'User not found'
+                'success'=> false,
+                'message'=> 'Course not found',
             ], 404);
         }
 
         $request->validate([
-            'email'=> 'required',
-            'password'=> 'required',
-            'role'=> 'required',
+            'name'=> 'required',
+            
         ]);
 
-        try{
-            $user->update([
-                'email'=> $request->email,
-                'password'=> bcrypt($request->password),
-                'role'=> $request->role
+       try{
+            $course->update([
+                'name'=> $request->name,
+                'workshop_id'=> $request->workshop_id
             ]);
-    
+
             return response()->json([
                 'success'=> true,
-                'message'=> 'User updated',
-                'data'=> $user
+                'message'=> 'Course updated',
+                'courses'=> $course,
             ]);
         }catch(\Exception $e){
             return response()->json([
                 'success'=> false,
-                'message'=> 'Failed to update user',
-            ],500);
+                'message'=> 'Course failed to be updated',
+            ], 500);
         }
     }
 
@@ -118,28 +113,27 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        $user = User::find($id);
+        $course = Course::find($id);
 
-        if(!$user){
+        if(!$course){
             return response()->json([
-                'message'=> 'User not found'
+                'success'=> false,
+                'message'=> 'Course not found',
             ], 404);
         }
 
-        try{
-            $user->student()->delete();
-            $user->teacher()->delete();
-            $user->delete();
+       try{
+            $course->delete();
 
             return response()->json([
                 'success'=> true,
-                'message'=> 'User deleted',
+                'message'=> 'Course deleted',
             ]);
         }catch(\Exception $e){
             return response()->json([
                 'success'=> false,
-                'message'=> 'Failed to delete user',
-            ],500);
+                'message'=> 'Course failed to be deleted',
+            ], 500);
         }
     }
 }
