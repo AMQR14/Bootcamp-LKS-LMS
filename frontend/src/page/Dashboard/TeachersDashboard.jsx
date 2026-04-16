@@ -54,8 +54,8 @@ export default function TeachersDashboard(){
                                             <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>NIP</th>
                                             <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>NIK</th>
                                             <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>NIDN</th>
-                                            <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>Date of Birth</th>
-                                            <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>Joined At</th>
+                                            <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2] text-nowrap'>Date of Birth</th>
+                                            <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2] text-nowrap'>Joined At</th>
                                             <th className='border-b-2 p-2 border-[#A3BAC2] w-1'>Action</th>
                                         </tr>
                                     </thead>
@@ -68,8 +68,8 @@ export default function TeachersDashboard(){
                                                 <td className='border-e border-[#A3BAC2] border-b p-2'>{teacher.nip}</td>
                                                 <td className='border-e border-[#A3BAC2] border-b p-2'>{teacher.nik}</td>
                                                 <td className='border-e border-[#A3BAC2] border-b p-2'>{teacher.nidn}</td>
-                                                <td className='border-e border-[#A3BAC2] border-b p-2'>{teacher.date_of_birth}</td>
-                                                <td className='border-e border-[#A3BAC2] border-b p-2'>{teacher.joined_at}</td>
+                                                <td className='border-e border-[#A3BAC2] border-b p-2 text-nowrap'>{teacher.date_of_birth}</td>
+                                                <td className='border-e border-[#A3BAC2] border-b p-2 text-nowrap'>{teacher.joined_at}</td>
                                                 <td className='border-b p-2 px-6 border-[#A3BAC2]'>
                                                     <div className="flex justify-center items-center gap-5">
                                                         <Link to={`/editteachers/${teacher.id}`} className='flex justify-center items-center w-24 h-8 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md'>Edit</Link>

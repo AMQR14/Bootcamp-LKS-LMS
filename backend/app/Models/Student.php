@@ -14,6 +14,7 @@ class Student extends Model
         'user_id',
         'workshop_id',
         'name',
+        'nis',
         'nisn',
         'nik',
         'email',

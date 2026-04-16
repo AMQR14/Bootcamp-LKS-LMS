@@ -35,10 +35,10 @@ function AppRoutes(){
       <Route path="/createcourses" element={<CreateCourses/>}/>
       <Route path="/dashboardteachers" element={<TeachersDashboard/>}/>
       <Route path="/dashboardstudents" element={<StudentsDashboard/>}/>
-      <Route path="/editcourses" element={<EditCourses/>}/>
+      <Route path="/editcourses/:id" element={<EditCourses/>}/>
       <Route path="/createstudents" element={<CreateStudents/>}/>
       <Route path="/createteachers" element={<CreateTeachers/>}/>
-      <Route path="/editstudents" element={<EditStudents/>}/>
+      <Route path="/editstudents/:id" element={<EditStudents/>}/>
       <Route path="/editteachers/:id" element={<EditTeachers/>}/>
       <Route path="/profile" element={<Profile/>}/>
       <Route path="/questions" element={<Questions/>} /> 

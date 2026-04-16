@@ -32,7 +32,6 @@ export default function CreateUsers(){
             if(err.response?.status == 422){
                 setError(err.response.data.errors)
             }
-            
         }finally{
             setLoading(false)
         }
@@ -60,7 +59,7 @@ export default function CreateUsers(){
                                         <label htmlFor="" className='font-bold'>Role:</label>
                                         <select name="" id="" value={form.role} className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]' onChange={e=> setForm({...form, role: e.target.value})}>
                                             <option value="" disabled> Select Role </option>
-                                            <option value="Admin" className='rounded-2xl'>Admin</option>
+                                            <option value="admin" className='rounded-2xl'>Admin</option>
                                         </select>
                                         {error.role && <p className='text-red-500'>{error.role[0]}</p>}
                                     </div>

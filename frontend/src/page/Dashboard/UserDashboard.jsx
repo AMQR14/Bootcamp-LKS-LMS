@@ -59,7 +59,9 @@ return (
                                         <tr key={user.id}>
                                         <td className='border-e border-[#A3BAC2] border-b p-2 '>{index+1}</td>
                                         <td className='border-e border-[#A3BAC2] border-b p-2'>{user.email}</td>
-                                        <td className='border-e border-[#A3BAC2] border-b p-2'>{user.role}</td>
+                                        <td className='border-e border-[#A3BAC2] border-b p-2'>
+                                            {user.role[0].toUpperCase() + user.role.slice(1)}
+                                        </td>
                                         <td className='border-b p-2 px-6 border-[#A3BAC2]'>
                                             <div className="flex justify-center items-center gap-5">
                                             <Link to={`/editusers/${user.id}`} className='flex justify-center items-center w-24 h-8 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md'>Edit</Link>

@@ -32,7 +32,7 @@ class TeacherController extends Controller
             'nip' => 'required',
             'nik' => 'required',
             'nidn' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users' ,
             'date_of_birth' => 'required|date',
         ]);
 
@@ -110,7 +110,7 @@ class TeacherController extends Controller
             'nip' => 'required',
             'nik' => 'required',
             'nidn' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email,' . $teacher->id,   
             'date_of_birth' => 'required|date',
         ]);
 

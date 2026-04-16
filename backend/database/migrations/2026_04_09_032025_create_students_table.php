@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained();
             $table->foreignId('workshop_id')->nullable()->constrained();
             $table->string('name');
+            $table->string('nis');
             $table->string('nisn');
             $table->string('nik');
             $table->string('email');

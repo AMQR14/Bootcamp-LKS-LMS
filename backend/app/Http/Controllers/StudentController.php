@@ -28,16 +28,19 @@ class StudentController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'nis' => 'required',
             'nisn' => 'required', 
             'nik' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users',
+            'date_of_birth' => 'required|date',
         ]);
 
         try{
             $student = Student::create([
                 'name' => $request->name,
+                'nis' => $request->nis,
                 'nisn' => $request->nisn,
-                'nik' => $request->nisn,
+                'nik' => $request->nik,
                 'email' => $request->email,
                 'date_of_birth' => $request->date_of_birth,
                 'joined_at' => now(),
@@ -103,16 +106,19 @@ class StudentController extends Controller
 
         $request->validate([
             'name' => 'required',
+            'nis' => 'required', 
             'nisn' => 'required', 
             'nik' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email,' . $student->id,
+            'date_of_birth' => 'required|date',
         ]);
 
         try{
             $student->update([
                 'name' => $request->name,
+                'nis' => $request->nis,
                 'nisn' => $request->nisn,
-                'nik' => $request->nisn,
+                'nik' => $request->nik,
                 'email' => $request->email,
                 'date_of_birth' => $request->date_of_birth,
                 'joined_at' => now(),

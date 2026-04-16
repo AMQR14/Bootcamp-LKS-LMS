@@ -9,49 +9,24 @@ export default function Login(){
         password: ''
     });
     const navigate = useNavigate();
-    const [error, setError] = useState({})
-    const auth = useAuth();
+    const [error, setError] = useState('')
+    const {login} = useAuth()
 
-    const validate = () => {
-        let isValid = true;
-        const newErrors = {}
-
-        if(!form.email){
-            newErrors.email = 'Email is required'
-            isValid = false
-        }
-        // else if(form.email != auth.user.email){
-        //     newErrors.email = 'Invalid email'
-        //     isValid = false
-        // }
-
-        if(!form.password){
-            newErrors.password = 'password is required'
-            isValid = false
-        }
-        // else if(form.password != auth.user.password){
-        //     newErrors.password = 'Invalid password'
-        //     isValid = false
-        // }
-
-        setError(newErrors)
-        console.log(form)
-        console.log(error)
-        return isValid;
-    }
+    
 
     async function handleLogin(e) {
         e.preventDefault()
         setError('')
 
-        if(validate()){
             try{
-                await auth.login(form.email, form.password)
+                await login(form.email, form.password)
                 navigate('/dashboard')
             }catch(err){
-                setError(err.response?.data?.message || 'Failed to login')
+                if(err.response.status == 401){
+                    setError(err.response.data.message || 'Failed to login')
+                    console.log(error)
+                }
             }
-        }
     }
 
     return (
@@ -64,11 +39,12 @@ export default function Login(){
                             <h1 className="font-bold text-5xl text-white">Welcome to Ipsum Learning Management System</h1>
                         </div>
                     </div>
-                    <div className="flex justify-center items-center md:w-1/2">
-                        <div className="flex flex-col w-110 h-130 gap-8">
+                    <div className="flex justify-center items-center w-full md:w-1/2">
+                        <div className="flex flex-col max-w-110 w-full md:w-110 h-130 gap-8">
                             <div className="flex flex-col justify-center items-center">
                                 <h2 className="font-bold text-3xl text-[#3f454c]">Welcome</h2>
                                 <p className="text-[#7e8c9b]">Login into your account</p>
+
                             </div>
                             <form action="" className="flex flex-col m-5" onSubmit={handleLogin}>
                                 <div className="flex flex-col w-full mb-10">
@@ -76,14 +52,15 @@ export default function Login(){
                                     <input type="email" placeholder="Enter your Email" className="p-2 border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]"
                                     onChange={e=> setForm({...form, email:e.target.value})}
                                     />
-                                    {error.email && <div className='text-red-500'>{error.email}</div>}
                                 </div>
-                                <div className="flex flex-col w-full mb-14">
+                                <div className="flex flex-col w-full mb-9">
                                     <label className="text-[#3f454c] font-semibold mb-2">Password:</label>
                                     <input type="password" placeholder="Enter your Password" className="p-2 border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]"
                                     onChange={e=> setForm({...form, password:e.target.value})}
                                     />
-                                    {error.password && <div className='text-red-500'>{error.password}</div>}
+                                </div>
+                                <div className='text-center text-red-500 mb-9'>
+                                    {error && <p>{error}</p>}
                                 </div>
                                 <button className="p-3 bg-[#60848f] text-white font-bold rounded-md hover:bg-[#7098a4] transition-all" type='submit'>
                                     Log In

@@ -31,6 +31,10 @@ export default function CreateTeachers(){
                 date_of_birth: form.date_of_birth,
             });
             navigate('/dashboardteachers')
+        }catch(err){
+            if(err.response.status = 422){
+                setError(err.response.data.errors)
+            }
         }finally{
             setLoading(false)
         }
@@ -48,26 +52,32 @@ export default function CreateTeachers(){
                                     <div className='flex flex-col gap-2'>
                                         <label htmlFor="" className='font-bold'>Name:</label>
                                         <input type="text" placeholder='Enter name' className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]' onChange={e => setForm({...form, name: e.target.value})}/>
+                                        {error.name && <p className='text-red-500'>{error.name[0]}</p>}
                                     </div>
                                     <div className='flex flex-col gap-2'>
                                         <label htmlFor="" className='font-bold'>Email:</label>
                                         <input type="text" placeholder='Enter email' className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]' onChange={e => setForm({...form, email: e.target.value})}/>
+                                        {error.email && <p className='text-red-500'>{error.email[0]}</p>}
                                     </div>
                                     <div className='flex flex-col gap-2'>
                                         <label htmlFor="" className='font-bold'>NIK:</label>
                                         <input type="text" placeholder='Enter NIK' className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]' onChange={e => setForm({...form, nik: e.target.value})}/>
+                                        {error.nik && <p className='text-red-500'>{error.nik[0]}</p>}
                                     </div>
                                     <div className='flex flex-col gap-2'>
                                         <label htmlFor="" className='font-bold'>NIP:</label>
                                         <input type="text" placeholder='Enter NIP' className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]' onChange={e => setForm({...form, nip: e.target.value})}/>
+                                        {error.nip && <p className='text-red-500'>{error.nip[0]}</p>}
                                     </div>
                                     <div className='flex flex-col gap-2'>
                                         <label htmlFor="" className='font-bold'>NIDN:</label>
                                         <input type="text" placeholder='Enter NIDN' className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]' onChange={e => setForm({...form, nidn: e.target.value})}/>
+                                        {error.nidn && <p className='text-red-500'>{error.email[0]}</p>}
                                     </div>
                                     <div className='flex flex-col gap-2'>
                                         <label htmlFor="" className='font-bold'>Date of Birth:</label>
                                         <input type="date" placeholder='Enter NIDN' className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]' onChange={e => setForm({...form, date_of_birth: e.target.value})}/>
+                                        {error.date_of_birth && <p className='text-red-500'>{error.email[0]}</p>}
                                     </div>
                                     <button className='p-3 bg-[#60848f] text-white font-bold rounded-md hover:bg-[#7098a4] transition-all mt-10' type='submit' disabled={loading}>{loading ? 'Creating...': 'Create'}</button>
                                 </div>

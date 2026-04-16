@@ -28,7 +28,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'email'=> 'required|email',
+            'email'=> 'required|email|unique:users' ,
             'password'=> 'required|min:6',
             'role'=> 'required',
         ]);
@@ -88,8 +88,8 @@ class UserController extends Controller
         }
 
         $request->validate([
-            'email'=> 'required',
-            'password'=> 'required',
+            'email'=> 'required|email|unique:users,email,' . $user->id,
+            'password'=> 'required|min:6',
             'role'=> 'required',
         ]);
 
@@ -98,6 +98,14 @@ class UserController extends Controller
                 'email'=> $request->email,
                 'password'=> bcrypt($request->password),
                 'role'=> $request->role
+            ]);
+
+            $user->student()->update([
+                'email'=> $request->email,
+            ]);
+
+            $user->teacher()->update([
+                'email'=> $request->email,
             ]);
     
             return response()->json([
