@@ -28,7 +28,7 @@ class WorkshopController extends Controller
     {
         $request->validate([
             'name'=> 'required',
-            'description=> required'
+            'description' => 'required'
         ]);
 
         try{
@@ -84,6 +84,11 @@ class WorkshopController extends Controller
                 'message'=> 'Class not found',
             ], 404);
         }
+
+        $request->validate([
+            'name'=> 'required',
+            'description' => 'required'
+        ]);
 
         try{
             $workshop->update([

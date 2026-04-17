@@ -10,18 +10,12 @@ class Question extends Model
 {
     protected $fillable = [
         'exam_id',
-        'course_id',
         'question'
     ];
 
     public function exam(): BelongsTo
     {
         return $this->belongsTo(Exam::class);
-    } 
-
-    public function course(): BelongsTo
-    {
-        return $this->belongsTo(Course::class);
     } 
 
     public function answer(): HasMany

@@ -19,17 +19,7 @@ class Course extends Model
     return $this->belongsTo(Workshop::class);
     }
 
-    public function teacher(): HasOne
-    {
-        return $this->hasOne(Teacher::class, 'course_id');
-    }
-
-    public function student(): HasMany
-    {
-        return $this->hasMany(Student::class, 'course_id');
-    }
-
-    public function exam(): HasMany
+    public function exam(): HasOne
     {
         return $this->hasMany(Exam::class, 'course_id');
     }
@@ -38,9 +28,5 @@ class Course extends Model
     {
         return $this->hasMany(CourseFile::class, 'course_id');
     }
-
-    public function question(): HasMany
-    {
-        return $this->hasMany(Question::class, 'course_id');
-    }
+ 
 }

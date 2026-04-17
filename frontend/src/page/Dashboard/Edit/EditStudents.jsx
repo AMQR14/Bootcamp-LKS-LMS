@@ -42,7 +42,7 @@ export default function EditTeachers(){
                 nik: form.nik,
                 date_of_birth: form.date_of_birth,
             })
-            navigate('/dashboardstudents')
+            navigate('/admin/dashboard/students')
         }catch(err){
             if(err.response.status == 422){
                 setError(err.response.data.errors)

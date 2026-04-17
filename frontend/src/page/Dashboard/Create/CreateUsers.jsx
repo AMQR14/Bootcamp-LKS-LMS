@@ -27,7 +27,7 @@ export default function CreateUsers(){
                 role: form.role,
             })
             console.log('hello')
-            navigate('/dashboardusers')
+            navigate('/admin/dashboard/users')
         }catch(err){
             if(err.response?.status == 422){
                 setError(err.response.data.errors)

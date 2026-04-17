@@ -7,6 +7,7 @@ use App\Http\Controllers\CourseFileController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\MultipleChoiceController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\StatsController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\UserController;
@@ -28,6 +29,8 @@ Route::prefix('v1')->group(function (){
     Route::apiResource('answers', AnswerController::class); 
     Route::apiResource('multiplechoices', MultipleChoiceController::class);    
     Route::apiResource('coursefiles', CourseFileController::class);
+    Route::get('/stats', [StatsController::class, 'index']);
+    Route::get('/stats/students-by-year', [StatsController::class, 'studentsByYear']);
     
     Route::middleware(['auth:sanctum'])->group(function (){
 

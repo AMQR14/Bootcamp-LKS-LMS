@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Teacher extends Model
 {
     protected $fillable = [
-        'course_id',
         'user_id',
         'workshop_id',
         'name',
@@ -31,8 +30,4 @@ class Teacher extends Model
         return $this->belongsTo(Workshop::class);
     }
 
-    public function course(): BelongsTo
-    {
-        return $this->belongsTo(Course::class);
-    }
 }

@@ -1,7 +1,7 @@
 import Navbar2 from "../components/Navbar2"
 import Footer from "../components/Footer"
 import Sidebar from "../components/Sidebar"
-import {User, Book, LayoutDashboard, GraduationCap, Users, CircleQuestionMark} from 'lucide-react'
+import {User, Book, LayoutDashboard, GraduationCap, Users, CircleQuestionMark, Settings, Clipboard, FileQuestion} from 'lucide-react'
 import {Link, useLocation, useNavigate} from 'react-router-dom'
 import { useState } from "react"
 import { useAuth } from "../contexts/AuthContext"
@@ -61,7 +61,7 @@ export default function HomeLayout({children}){
                                 <div className="text-sm text-[#707984]">Student</div>
                             </div>
                             <div className="m-3 text-[#A3BAC2]">
-                                <Link to={'/profile'}>
+                                <Link to={'/admin/dashboard/profile'}>
                                     <button className="mb-2 py-1.25 px-3 text-white bg-[#60848f] hover:bg-[#739daa] transition-all font-semibold rounded-md flex justify-center w-full">Profile</button>
                                 </Link>
                                 <hr className="border-[1.2px]"/>
@@ -80,36 +80,50 @@ export default function HomeLayout({children}){
                                 </div>
                             </div>
                         </Link>
-                        <Link to={'/coursesdashboard'}>
-                            <div className={`hover:bg-[#E0E8EB] hover:border-l-8 hover:font-bold h-full w-full transition-all text-[#3f454c] font-semibold py-2 ${location.pathname == '/coursesdashboard' ? 'border-l-8 ' : 'none'}`}>
-                                <div className="flex ml-8 items-center gap-1">
-                                    <Book color="#3f454c" size={18}/>Courses
-                                </div>
-                            </div>
-                        </Link>
-                        <Link to={'/dashboardusers'}>
-                            <div className={`hover:bg-[#E0E8EB] hover:border-l-8 hover:font-bold h-full w-full transition-all text-[#3f454c] font-semibold py-2 ${location.pathname == '/dashboardusers' ? 'border-l-8 ' : 'none'}`}>
+                        <Link to={'/admin/dashboard/users'}>
+                            <div className={`hover:bg-[#E0E8EB] hover:border-l-8 hover:font-bold h-full w-full transition-all text-[#3f454c] font-semibold py-2 ${location.pathname == '/admin/dashboard/users' ? 'border-l-8 ' : 'none'}`}>
                                 <div className="flex ml-8 items-center gap-1">
                                     <User color="#3f454c" size={18}/>Users
                                 </div>
                             </div>
                         </Link>
-                        <Link to={'/dashboardteachers'}>
-                            <div className={`hover:bg-[#E0E8EB] hover:border-l-8 hover:font-bold h-full w-full transition-all text-[#3f454c] font-semibold py-2 ${location.pathname == '/dashboardteachers' ? 'border-l-8 ' : 'none'}`}>
+                        <Link to={'/admin/dashboard/teachers'}>
+                            <div className={`hover:bg-[#E0E8EB] hover:border-l-8 hover:font-bold h-full w-full transition-all text-[#3f454c] font-semibold py-2 ${location.pathname == '/admin/dashboard/teachers' ? 'border-l-8 ' : 'none'}`}>
                                 <div className="flex ml-8 items-center gap-1">
                                     <GraduationCap color="#3f454c" size={18}/>Teachers
                                 </div>
                             </div>
                         </Link>
-                        <Link to={'/dashboardstudents'}>
-                            <div className={`hover:bg-[#E0E8EB] hover:border-l-8 hover:font-bold h-full w-full transition-all text-[#3f454c] font-semibold py-2 ${location.pathname == '/dashboardstudents' ? 'border-l-8 ' : 'none'}`}>
+                        <Link to={'/admin/dashboard/students'}>
+                            <div className={`hover:bg-[#E0E8EB] hover:border-l-8 hover:font-bold h-full w-full transition-all text-[#3f454c] font-semibold py-2 ${location.pathname == '/admin/dashboard/students' ? 'border-l-8 ' : 'none'}`}>
                                 <div className="flex ml-8 items-center gap-1">
                                     <Users color="#3f454c" size={18}/>Students
                                 </div>
                             </div>
                         </Link>
-                        <Link to={'/questions'}>
-                            <div className={`hover:bg-[#E0E8EB] hover:border-l-8 hover:font-bold h-full w-full transition-all text-[#3f454c] font-semibold py-2 ${location.pathname == '/questions' ? 'border-l-8 ' : 'none'}`}>
+                        <Link to={'/admin/dashboard/classes'}>
+                            <div className={`hover:bg-[#E0E8EB] hover:border-l-8 hover:font-bold h-full w-full transition-all text-[#3f454c] font-semibold py-2 ${location.pathname == '/admin/dashboard/classes' ? 'border-l-8 ' : 'none'}`}>
+                                <div className="flex ml-8 items-center gap-1">
+                                    <Clipboard color="#3f454c" size={18}/>Classes
+                                </div>
+                            </div>
+                        </Link>
+                        <Link to={'/admin/dashboard/courses'}>
+                            <div className={`hover:bg-[#E0E8EB] hover:border-l-8 hover:font-bold h-full w-full transition-all text-[#3f454c] font-semibold py-2 ${location.pathname == '/admin/dashboard/courses' ? 'border-l-8 ' : 'none'}`}>
+                                <div className="flex ml-8 items-center gap-1">
+                                    <Book color="#3f454c" size={18}/>Courses
+                                </div>
+                            </div>
+                        </Link>
+                        <Link to={'/admin/dashboard/exams'}>
+                            <div className={`hover:bg-[#E0E8EB] hover:border-l-8 hover:font-bold h-full w-full transition-all text-[#3f454c] font-semibold py-2 ${location.pathname == '/admin/dashboard/exams' ? 'border-l-8 ' : 'none'}`}>
+                                <div className="flex ml-8 items-center gap-1">
+                                    <FileQuestion color="#3f454c" size={18}/>Exams
+                                </div>
+                            </div>
+                        </Link>
+                        <Link to={'/admin/dashboard/questions'}>
+                            <div className={`hover:bg-[#E0E8EB] hover:border-l-8 hover:font-bold h-full w-full transition-all text-[#3f454c] font-semibold py-2 ${location.pathname == '/admin/dashboard/questions' ? 'border-l-8 ' : 'none'}`}>
                                 <div className="flex ml-8 items-center gap-1">
                                     <CircleQuestionMark color="#3f454c" size={18}/>Questions
                                 </div>

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import DashboardLayout from '../../layouts/DashboardLayout'
 import {Link} from 'react-router-dom'
 import api from '../../lib/api'
+import { Edit, Plus, Trash } from 'lucide-react'
 
 export default function UserDashboard(){
     const [users, setUsers] = useState([])
@@ -37,7 +38,7 @@ return (
                         <h1 className='font-bold text-2xl text-[#3f454c]'>Users Dashboard</h1>
                         <div>
                             <div className='flex justify-end'>
-                                <Link to={'/createusers'} className='flex justify-center items-center w-24 h-10 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md '>Create</Link>
+                                <Link to={'/admin/dashboard/users/create'} className='flex justify-center items-center w-14 h-10 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md '><Plus className='size-7 stroke-2'/></Link>
                             </div>
                         </div>
                         {loading ? 
@@ -63,9 +64,9 @@ return (
                                             {user.role[0].toUpperCase() + user.role.slice(1)}
                                         </td>
                                         <td className='border-b p-2 px-6 border-[#A3BAC2]'>
-                                            <div className="flex justify-center items-center gap-5">
-                                            <Link to={`/editusers/${user.id}`} className='flex justify-center items-center w-24 h-8 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md'>Edit</Link>
-                                            <button className='flex justify-center items-center w-24 h-8 bg-[#d25252] hover:bg-[#ea5e5e] transition-all text-white font-semibold rounded-md' onClick={()=> handleDelete(user.id)}>Delete</button>
+                                            <div className="flex justify-center items-center gap-3">
+                                            <Link to={`/admin/dashboard/users/${user.id}/edit`} className='flex justify-center items-center w-10 h-8 bg-[#5ca3b8] hover:bg-[#66b2c9] transition-all text-white font-semibold rounded-md'><Edit/></Link>
+                                            <button className='flex justify-center items-center w-10 h-8 bg-[#d25252] hover:bg-[#ea5e5e] transition-all text-white font-semibold rounded-md' onClick={()=> handleDelete(user.id)}><Trash/></button>
                                             </div>
                                         </td>
                                     </tr>

@@ -30,7 +30,7 @@ export default function CreateTeachers(){
                 nik: form.nik,
                 date_of_birth: form.date_of_birth,
             })
-            navigate('/dashboardstudents')
+            navigate('/admin/dashboard/students')
             console.log(form.date_of_birth)
         }catch(err){
             if(err.response.status = 422){

@@ -109,7 +109,7 @@ class StudentController extends Controller
             'nis' => 'required', 
             'nisn' => 'required', 
             'nik' => 'required',
-            'email' => 'required|email|unique:users,email,' . $student->id,
+            'email' => 'required|email|unique:students,email,' . $student->id,
             'date_of_birth' => 'required|date',
         ]);
 

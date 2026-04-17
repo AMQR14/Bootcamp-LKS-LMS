@@ -34,6 +34,9 @@ export default function Navbar(){
                         <li className={`hover:text-[#616975] transition-all cursor-pointer ${location.pathname == '/courses' ? 'border-b-2' : 'none' }`}>
                             <Link to={'/courses'}>Courses</Link>
                         </li>
+                        <li className={`hover:text-[#616975] transition-all cursor-pointer ${location.pathname == '/exams1' ? 'border-b-2' : 'none' }`}>
+                            <Link to={'/courses'}>Exams</Link>
+                        </li>
                         <li className={`hover:text-[#616975] transition-all cursor-pointer ${location.pathname == '/teachers' ? 'border-b-2' : 'none' }`}>
                             <Link to={'/teachers'}>Teachers</Link>
                         </li>

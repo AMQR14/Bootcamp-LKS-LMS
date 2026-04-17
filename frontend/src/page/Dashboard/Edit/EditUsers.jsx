@@ -39,7 +39,7 @@ export default function EditUsers(){
                 password: form.password, 
                 role: form.role
             })
-            navigate('/dashboardusers')
+            navigate('/admin/dashboard/users')
         }catch(err){
             if(err.response?.status == 422){
                 setError(err.response.data.errors)

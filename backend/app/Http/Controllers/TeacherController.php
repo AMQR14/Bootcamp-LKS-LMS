@@ -15,6 +15,8 @@ class TeacherController extends Controller
     {
         $teachers = Teacher::all();
 
+        $teachers = Teacher::with('workshop')->get();
+
         return response()->json([
             'success'=> true,
             'message'=> 'Success',
@@ -34,6 +36,7 @@ class TeacherController extends Controller
             'nidn' => 'required',
             'email' => 'required|email|unique:users' ,
             'date_of_birth' => 'required|date',
+            'workshop_id' => 'required',
         ]);
 
         try{
@@ -44,6 +47,7 @@ class TeacherController extends Controller
                 'nidn' => $request->nidn,
                 'email' => $request->email,
                 'date_of_birth' => $request->date_of_birth,
+                'workshop_id' => $request->workshop_id,
                 'joined_at'=> now()
             ]);
 
@@ -75,7 +79,7 @@ class TeacherController extends Controller
      */
     public function show(string $id)
     {
-        $teacher = Teacher::find($id);
+        $teacher = Teacher::with('workshop')->find($id);
 
         if(!$teacher){
             return response()->json([
@@ -110,7 +114,7 @@ class TeacherController extends Controller
             'nip' => 'required',
             'nik' => 'required',
             'nidn' => 'required',
-            'email' => 'required|email|unique:users,email,' . $teacher->id,   
+            'email' => 'required|email|unique:teachers,email,' . $teacher->id,   
             'date_of_birth' => 'required|date',
         ]);
 
@@ -122,6 +126,7 @@ class TeacherController extends Controller
                 'nidn' => $request->nidn,
                 'email' => $request->email,
                 'date_of_birth' => $request->date_of_birth,
+                'workshop_id' => $request->workshop_id,
             ]);
 
             $teacher->user()->update([
