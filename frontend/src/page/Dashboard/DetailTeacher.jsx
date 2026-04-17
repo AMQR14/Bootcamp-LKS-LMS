@@ -33,7 +33,7 @@ export default function DetailTeachers(){
                                 <Link to={'/admin/dashboard/teachers'} className='flex justify-center items-center w-14 h-10 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md '><MoveLeft className='size-7 stroke-2'/></Link>
                             </div>
                         </div>
-                        <div className='flex flex-col lg:flex-row gap-2 w-full  mt-6 shadow-lg rounded-xl p-8 text-[#3f454c] border-[#A3BAC2] border-2'>
+                        <div className='flex flex-col lg:flex-row gap-2 w-full  mt-6  rounded-xl p-8 text-[#3f454c] border-[#A3BAC2] border-2'>
                             <div className='lg:w-[50%] flex flex-col gap-6'>
                                 <div className='flex gap-2 bg-gray-100 p-3 px-5 rounded-md'>
                                     <label className='font-semibold'>Name :</label>
