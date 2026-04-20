@@ -11,21 +11,34 @@ export default function EditTeachers(){
         nisn: '',
         nik: '',
         date_of_birth: '',
+        workshop_id: '',
     })
+    const [classes, setClasses] = useState([])
     const [error, setError] = useState({})
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
     const {id} = useParams()
 
-    useEffect(()=>{
-        async function fetchStudent() {
-            try{
-                const res = await api.get(`/students/${id}`)
-                setForm(res.data.student)
-            }finally{
-                setLoading(false)
-            }
+    async function fetchClass() {
+        try{
+            const res = await api.get('/workshops')
+            setClasses(res.data.classes)
+        }finally{
+            setLoading(false)
         }
+    }
+
+    async function fetchStudent() {
+        try{
+            const res = await api.get(`/students/${id}`)
+            setForm(res.data.student)
+        }finally{
+            setLoading(false)
+        }
+    }
+
+    useEffect(()=>{
+        fetchClass()
         fetchStudent()
     },[])
 
@@ -41,6 +54,7 @@ export default function EditTeachers(){
                 nisn: form.nisn,
                 nik: form.nik,
                 date_of_birth: form.date_of_birth,
+                workshop_id: form.workshop_id,
             })
             navigate('/admin/dashboard/students')
         }catch(err){
@@ -92,10 +106,14 @@ export default function EditTeachers(){
                                         {error.nik && <p className='text-red-500'>{error.nik[0]}</p>}
                                     </div>
                                     <div className='flex flex-col gap-2'>
-                                        <label htmlFor="" className='font-bold'>Date of Birth:</label>
-                                        <input type="date" value={loading ? 'Loading...' : form.date_of_birth} placeholder='Enter email address' className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]'
-                                        onChange={e => setForm({...form, date_of_birth:e.target.value})}/>
-                                        {error.date_of_birth && <p className='text-red-500'>{error.date_of_birth[0]}</p>}
+                                        <label htmlFor="" className='font-bold'>Class:</label>
+                                        <select name="" value={loading ? 'Loading... ' : form.workshop_id} id="" className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]'
+                                        onChange={e => setForm({...form, workshop_id:e.target.value})}>
+                                            {classes.map((classe)=>(
+                                                <option key={classe.id} value={classe.id}>{classe.name}</option>
+                                            ))}
+                                        </select>
+                                        {error.workshop_id && <p className='text-red-500'>{error.workshop_id[0]}</p>}
                                     </div>
                                     <button className='p-3 bg-[#60848f] text-white font-bold rounded-md hover:bg-[#7098a4] transition-all mt-10' type='submit' disabled={saving}>{saving? 'Saving...' : 'Edit'}</button>
                                 </div>

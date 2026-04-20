@@ -25,6 +25,7 @@ export default function UserDashboard(){
     async function handleDelete(id) {
         try{
            await api.delete(`/users/${id}`)
+           window.confirm('hello')
            fetchAllUsers();
         }finally{
 
@@ -41,16 +42,14 @@ return (
                                 <Link to={'/admin/dashboard/users/create'} className='flex justify-center items-center w-14 h-10 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md '><Plus className='size-7 stroke-2'/></Link>
                             </div>
                         </div>
-                        {loading ? 
-                            <div>Loading...</div>
-                        :
+                        {loading ? <div>Loading...</div> : users.length == 0 ? <div className='text-[#5a767f] font-semibold text-md bg-[#e0e8eb] mt-6 rounded-xl p-4 border border-[#b2cbd3]'>There is no users</div> :
                         <div className='my-6 rounded-md border-collapse border-2 overflow-x-auto border-[#A3BAC2]'>
                             <table className='min-w-200 w-full text-[#3f454c]'>
-                                <thead className=''>
+                                <thead className='text-[#5a767f] bg-[#e0e8eb]'>
                                     <tr >
                                         <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>No</th>
-                                        <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>email</th>
-                                        <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>role</th>
+                                        <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>Email</th>
+                                        <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>Role</th>
 
                                         <th className='border-b-2 p-2 border-[#A3BAC2] w-1'>Action</th>
                                     </tr>

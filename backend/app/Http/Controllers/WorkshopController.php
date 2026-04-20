@@ -13,11 +13,13 @@ class WorkshopController extends Controller
     public function index()
     {
         $workshops = Workshop::all();
+        $workshops = Workshop::with('courses')->get();
 
         return response()->json([
             'success'=> true,
             'message'=> 'Success',
             'classes'=> $workshops
+            
         ]);
     }
 
@@ -55,7 +57,7 @@ class WorkshopController extends Controller
      */
     public function show(string $id)
     {
-        $workshop = Workshop::find($id);
+        $workshop = Workshop::with('courses')->find($id);
 
         if(!$workshop){
             return response()->json([
@@ -76,7 +78,7 @@ class WorkshopController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $workshop = Workshop::find($id);
+        $workshop = Workshop::with('courses')->find($id);
 
         if(!$workshop){
             return response()->json([

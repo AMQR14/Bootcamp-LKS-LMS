@@ -8,7 +8,7 @@ export default function CreateUsers(){
     const [form, setForm] = useState({
         email: '',
         password: '',
-        role: 'Admin',
+        role: 'admin',
     })
     const [loading, setLoading] = useState(false)
 
@@ -26,7 +26,7 @@ export default function CreateUsers(){
                 password: form.password,
                 role: form.role,
             })
-            console.log('hello')
+            console.log(form)
             navigate('/admin/dashboard/users')
         }catch(err){
             if(err.response?.status == 422){

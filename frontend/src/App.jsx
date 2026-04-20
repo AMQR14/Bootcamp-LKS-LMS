@@ -26,7 +26,8 @@ import EditClasses from "./page/Dashboard/Edit/EditClasses"
 import ExamsDashboard from "./page/Dashboard/ExamsDashboard"
 import EditExams from "./page/Dashboard/Edit/EditExams"
 import CreateExams from "./page/Dashboard/Create/CreateExams"
-import DetailTeachers from "./page/Dashboard/DetailTeacher"
+import DetailTeachers from "./page/Dashboard/Detail/DetailTeacher"
+import DetailStudent from "./page/Dashboard/Detail/DetailStudent"
 import { AuthProvider } from "./contexts/AuthContext"
 
 function AppRoutes(){
@@ -40,9 +41,9 @@ function AppRoutes(){
       <Route path="/dashboard" element={<Dashboard/>}/>
       <Route path="/admin/dashboard/profile" element={<Profile/>}/>
 
-      <Route path="/admin/dashboard/courses" element={<CoursesDashboard/>}/>
-      <Route path="/admin/dashboard/courses/create" element={<CreateCourses/>}/>
-      <Route path="/admin/dashboard/courses/:id/edit" element={<EditCourses/>}/>
+      <Route path="/admin/dashboard/classes/:classid/courses" element={<CoursesDashboard/>}/>
+      <Route path="/admin/dashboard/classes/:id/courses/create" element={<CreateCourses/>}/>
+      <Route path="/admin/dashboard/classes/:classid/courses/:courseid/edit" element={<EditCourses/>}/>
 
       <Route path="/admin/dashboard/teachers" element={<TeachersDashboard/>}/>
       <Route path="/admin/dashboard/teachers/create" element={<CreateTeachers/>}/>
@@ -52,6 +53,7 @@ function AppRoutes(){
       <Route path="/admin/dashboard/students" element={<StudentsDashboard/>}/>
       <Route path="/admin/dashboard/students/create" element={<CreateStudents/>}/>
       <Route path="/admin/dashboard/students/:id/edit" element={<EditStudents/>}/>
+      <Route path="/admin/dashboard/students/:id/detail" element={<DetailStudent/>}/>
       
       <Route path="/admin/dashboard/questions" element={<Questions/>} /> 
       <Route path="/admin/dashboard/questions/create" element={<CreateQuestions/>}/>
@@ -65,9 +67,9 @@ function AppRoutes(){
       <Route path="/admin/dashboard/class/create" element={<CreateClasses/>}/>
       <Route path="/admin/dashboard/class/:id/edit" element={<EditClasses/>}/>
       
-      <Route path="/admin/dashboard/exams" element={<ExamsDashboard/>}/>
-      <Route path="/admin/dashboard/exams/create" element={<CreateExams/>}/>
-      <Route path="/admin/dashboard/exams/:id/edit" element={<EditExams/>}/>
+      <Route path="/admin/dashboard/classes/:classid/courses/:courseid/exams" element={<ExamsDashboard/>}/>
+      <Route path="/admin/dashboard/classes/:classid/courses/:courseid/exams/create" element={<CreateExams/>}/>
+      <Route path="/admin/dashboard/classes/:classid/courses/:courseid/exams/:examid/edit" element={<EditExams/>}/>
     </Routes>
   )
 }

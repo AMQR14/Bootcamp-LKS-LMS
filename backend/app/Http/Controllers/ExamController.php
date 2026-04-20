@@ -29,26 +29,28 @@ class ExamController extends Controller
         $request->validate([
             'name'=> 'required',
             'start_time'=> 'required|date_format:H:i:s',
-            'end_time'=> 'required|date_format:H:i:s'
+            'end_time'=> 'required|date_format:H:i:s',
+            'course_id'=> 'required'
         ]);
 
-        try{
+        // try{
             $exam = Exam::create([
                 'name'=> $request->name,
                 'start_time'=> $request->start_time,
-                'end_time'=> $request->end_time
+                'end_time'=> $request->end_time,
+                'course_id'=> $request->course_id
             ]);
             return response()->json([
                 'success'=> true,
                 'message'=> 'exam created',
                 'exam'=> $exam,
             ]);
-        }catch(\Exception $e){
-            return response()->json([
-                'success'=> false,
-                'message'=> 'exam failed to be created',
-            ], 500);
-        }
+        // }catch(\Exception $e){
+        //     return response()->json([
+        //         'success'=> false,
+        //         'message'=> 'exam failed to be created',
+        //     ], 500);
+        // }
     }
 
     /**

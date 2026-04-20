@@ -1,16 +1,19 @@
 import DashboardLayout from '../../../layouts/DashboardLayout'
-import {Link, useNavigate} from 'react-router-dom'
+import {Link, useNavigate, useParams} from 'react-router-dom'
 import {Plus} from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import api from '../../../lib/api'
 
 export default function CreateCourses(){
+    const [classes, setClasses] = useState([])
     const[form, setForm] = useState({
-        name: ''
+        name: '',
+        workshop_id: '',
     })
     const[error, setError] = useState({})
     const[loading, setLoading] = useState(false)
     const navigate = useNavigate()
+    const {id} = useParams()
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -18,9 +21,10 @@ export default function CreateCourses(){
         setLoading(true)
         try{
             await api.post('/courses', {
-                name:form.name
+                name:form.name,
+                workshop_id: `${id}`
             })
-            navigate('/admin/dashboard/courses')
+            navigate(`/admin/dashboard/classes/${id}/courses`)
         }catch(err){
             if(err.response.status == 422){
                 setError(err.response.data.errors)

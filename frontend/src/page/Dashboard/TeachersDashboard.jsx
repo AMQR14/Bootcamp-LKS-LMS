@@ -42,12 +42,10 @@ export default function TeachersDashboard(){
                                 <Link to={'/admin/dashboard/teachers/create'} className='flex justify-center items-center w-14 h-10 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md '><Plus className='size-7 stroke-2'/></Link>
                             </div>
                         </div>
-                        {
-                            loading ? 
-                            <div>Loading...</div>:
+                        {loading ? <div>Loading...</div> : teachers.length == 0 ? <div className='text-[#5a767f] font-semibold text-md bg-[#e0e8eb] mt-6 rounded-xl p-4 border border-[#b2cbd3]'>There is no teachers</div> :
                             <div className='my-6 rounded-md border-collapse border-2 overflow-x-auto border-[#A3BAC2]'>
                                 <table className='min-w-200 w-full text-[#3f454c]'>
-                                    <thead className=''>
+                                    <thead className='text-[#5a767f] bg-[#e0e8eb]'>
                                         <tr >
                                             <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>No</th>
                                             <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>Name</th>
@@ -61,7 +59,7 @@ export default function TeachersDashboard(){
                                         {teachers.map((teacher, index)=>(
                                             <tr key={teacher.id}>
                                                 <td className='border-e border-[#A3BAC2] border-b p-2 '>{index+1}</td>
-                                                <td className='border-e border-[#A3BAC2] border-b p-2'>{teacher.name}</td>
+                                                <td className='border-e border-[#A3BAC2] border-b p-2 text-wrap'>{teacher.name}</td>
                                                 <td className='border-e border-[#A3BAC2] border-b p-2'>{teacher.nik}</td>
                                                 <td className='border-e border-[#A3BAC2] border-b p-2 text-nowrap'>{teacher.date_of_birth}</td>
                                                 <td className='border-e border-[#A3BAC2] border-b p-2 text-nowrap'>{teacher.workshop.name}</td>

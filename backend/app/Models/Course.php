@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Course extends Model
 {
     protected $fillable = [
+        'workshop_id',
         'name',
         'description'
     ];
@@ -21,7 +22,7 @@ class Course extends Model
 
     public function exam(): HasOne
     {
-        return $this->hasMany(Exam::class, 'course_id');
+        return $this->hasOne(Exam::class, 'course_id');
     }
 
     public function courseFiles(): HasMany

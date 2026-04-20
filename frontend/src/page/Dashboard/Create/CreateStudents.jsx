@@ -1,7 +1,7 @@
 import DashboardLayout from '../../../layouts/DashboardLayout'
 import {Link, useNavigate} from 'react-router-dom'
 import {Plus} from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import api from '../../../lib/api'
 
 export default function CreateTeachers(){
@@ -12,10 +12,20 @@ export default function CreateTeachers(){
         nisn: '',
         nik: '',
         date_of_birth: '',
+        workshop_id: '',
     })
+    const [classes, setClasses] = useState([])
     const [error, setError] = useState({})
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
+
+    useEffect(()=>{
+        async function fetchClass() {
+            const res = await api.get('/workshops')
+            setClasses(res.data.classes)
+        }
+        fetchClass()
+    })
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -29,9 +39,9 @@ export default function CreateTeachers(){
                 nisn: form.nisn,
                 nik: form.nik,
                 date_of_birth: form.date_of_birth,
+                workshop_id: form.workshop_id,
             })
             navigate('/admin/dashboard/students')
-            console.log(form.date_of_birth)
         }catch(err){
             if(err.response.status = 422){
                 setError(err.response.data.errors)
@@ -83,6 +93,16 @@ export default function CreateTeachers(){
                                         <input type="date" placeholder='Enter email address' className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]'
                                         onChange={e => setForm({...form, date_of_birth:e.target.value})}/>
                                         {error.date_of_birth && <p className='text-red-500'>{error.date_of_birth[0]}</p>}
+                                    </div>
+                                    <div className='flex flex-col gap-2'>
+                                        <label htmlFor="" className='font-bold'>Class:</label>
+                                        <select name="" id="" className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]'
+                                        onChange={e => setForm({...form, workshop_id:e.target.value})}>
+                                            {classes.map((classe)=>(
+                                                <option key={classe.id} value={classe.id}>{classe.name}</option>
+                                            ))}
+                                        </select>
+                                        {error.workshop_id && <p className='text-red-500'>{error.workshop_id[0]}</p>}
                                     </div>
                                     <button className='p-3 bg-[#60848f] text-white font-bold rounded-md hover:bg-[#7098a4] transition-all mt-10' type='submit' disabled={loading}>{loading? 'Creating...' : 'Create'}</button>
                                 </div>

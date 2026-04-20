@@ -13,6 +13,7 @@ class CourseController extends Controller
     public function index()
     {
         $courses = Course::all();
+        $courses = Course::with('exam')->get();
 
         return response()->json([
             'success'=> true,
@@ -28,6 +29,7 @@ class CourseController extends Controller
     {
         $request->validate([
             'name'=> 'required',
+            'workshop_id'=> 'required',
         ]);
 
        try{
@@ -54,7 +56,7 @@ class CourseController extends Controller
      */
     public function show(string $id)
     {
-        $course = Course::find($id);
+        $course = Course::with('exam')->find($id);
 
         if(!$course){
             return response()->json([
@@ -75,7 +77,7 @@ class CourseController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $course = Course::find($id);
+        $course = Course::with('exam')->find($id);
 
         if(!$course){
             return response()->json([

@@ -7,6 +7,7 @@ import api from '../../../lib/api'
 export default function CreateExams(){
     const[form, setForm] = useState({
         name: '',
+        course_id: '',
         start_time: '',
         end_start_time: ''
     })
@@ -21,6 +22,7 @@ export default function CreateExams(){
         try{
             await api.post('/exams', {
                 name:form.name,
+                course_id: form.course_id,
                 start_time:form.start_time,
                 end_time:form.end_time
             })
@@ -45,6 +47,12 @@ export default function CreateExams(){
                                 <div className='flex flex-col justify-center gap-5'>
                                     <div className='flex flex-col gap-2'>
                                         <label htmlFor="" className='font-bold'>Name:</label>
+                                        <input type="text" placeholder='Enter exam name' className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]'
+                                        onChange={e => setForm({...form, name:e.target.value})}/>
+                                        {error.name && <p className='text-red-500'>{error.name[0]}</p>}
+                                    </div>
+                                    <div className='flex flex-col gap-2'>
+                                        <label htmlFor="" className='font-bold'>Course:</label>
                                         <input type="text" placeholder='Enter exam name' className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]'
                                         onChange={e => setForm({...form, name:e.target.value})}/>
                                         {error.name && <p className='text-red-500'>{error.name[0]}</p>}

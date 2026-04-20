@@ -5,18 +5,19 @@ import api from '../../../lib/api'
 
 export default function EditCourses(){
     const[form, setForm] = useState({
-            name: ''
+            name: '',
+            workshop_id: '',
         })
         const[error, setError] = useState({})
         const[loading, setLoading] = useState(true)
         const[saving, setSaving] = useState(false)
         const navigate = useNavigate()
-        const {id} = useParams()
+        const {classid, courseid} = useParams()
     
         useEffect(()=>{
             async function fetchCourse() {
                 try{
-                    const res = await api.get(`/courses/${id}`)
+                    const res = await api.get(`/courses/${courseid}`)
                     setForm(res.data.course)
                 }finally{
                     setLoading(false)
@@ -30,10 +31,11 @@ export default function EditCourses(){
             setError({})
             setSaving(true)
             try{
-                await api.put(`/courses/${id}`, {
-                    name: form.name
+                await api.put(`/courses/${courseid}`, {
+                    name: form.name,
+                    workshop_id: classid
                 })
-                navigate('/admin/dashboard/courses')
+                navigate(`/admin/dashboard/classes/${classid}/courses`)
             }catch(err){
                 if(err.response.status == 422){
                     setError(err.response.data.errors)

@@ -29,26 +29,26 @@ export default function Dashboard(){
                         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-5">
                             <div className="w-full h-full bg-[#E0E8EB] rounded-xl border border-[#b2cbd3] items-center justify-center">
                                 <div className='flex flex-col m-5 gap-5'> 
-                                    <h1 className='text-[#3f454c] font-bold text-xl bg-white w-full text-center rounded-md p-2'>Users</h1>
-                                    <p className='text-[#3f454c] font-bold text-xl bg-white w-full text-center rounded-md p-2'>{stats.users}</p>
+                                    <h1 className='text-[#5a767f] font-bold text-xl bg-white w-full text-center rounded-md p-2'>Users</h1>
+                                    <p className='text-[#5a767f] font-bold text-xl bg-white w-full text-center rounded-md p-2'>{stats.users}</p>
                                 </div>
                             </div>
                             <div className="w-full h-full bg-[#E0E8EB] rounded-xl border border-[#A3BAC2]">
                                 <div className='flex flex-col m-5 gap-5'> 
-                                    <h1 className='text-[#3f454c] font-bold text-xl bg-white w-full text-center rounded-md p-2'>Teachers</h1>
-                                    <p className='text-[#3f454c] font-bold text-xl bg-white w-full text-center rounded-md p-2'>{stats.teachers}</p>
+                                    <h1 className='text-[#5a767f] font-bold text-xl bg-white w-full text-center rounded-md p-2'>Teachers</h1>
+                                    <p className='text-[#5a767f] font-bold text-xl bg-white w-full text-center rounded-md p-2'>{stats.teachers}</p>
                                 </div>
                             </div>
                             <div className="w-full h-full bg-[#E0E8EB] rounded-xl border border-[#A3BAC2]">
                                 <div className='flex flex-col m-5 gap-5'> 
-                                    <h1 className='text-[#3f454c] font-bold text-xl bg-white w-full text-center rounded-md p-2'>Students</h1>
-                                    <p className='text-[#3f454c] font-bold text-xl bg-white w-full text-center rounded-md p-2'>{stats.students}</p>
+                                    <h1 className='text-[#5a767f] font-bold text-xl bg-white w-full text-center rounded-md p-2'>Students</h1>
+                                    <p className='text-[#5a767f] font-bold text-xl bg-white w-full text-center rounded-md p-2'>{stats.students}</p>
                                 </div>
                             </div>
                             <div className="w-full h-full bg-[#E0E8EB] rounded-xl border border-[#A3BAC2]">
                                 <div className='flex flex-col m-5 gap-5'> 
-                                    <h1 className='text-[#3f454c] font-bold text-xl bg-white w-full text-center rounded-md p-2'>Courses</h1>
-                                    <p className='text-[#3f454c] font-bold text-xl bg-white w-full text-center rounded-md p-2'>{stats.courses}</p>
+                                    <h1 className='text-[#5a767f] font-bold text-xl bg-white w-full text-center rounded-md p-2'>Courses</h1>
+                                    <p className='text-[#5a767f] font-bold text-xl bg-white w-full text-center rounded-md p-2'>{stats.courses}</p>
                                 </div>
                             </div>
                         </div>

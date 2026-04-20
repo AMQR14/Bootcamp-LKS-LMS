@@ -43,10 +43,10 @@ export default function Questions(){
                     </div>
                 </div>
                 
-                {loading ? <p>Loading...</p> :
+                {loading ? <div>Loading...</div> : questions.length == 0 ? <div className='text-[#5a767f] font-semibold text-md bg-[#e0e8eb] mt-6 rounded-xl p-4 border border-[#b2cbd3]'>There is no questions</div> :
                     <div className='my-6 rounded-md border-collapse border-2 overflow-x-auto border-[#A3BAC2]'>
                         <table className='min-w-200 w-full text-[#3f454c]'>
-                            <thead className=''>
+                            <thead className='text-[#5a767f] bg-[#e0e8eb]'>
                                 <tr >
                                     <th className='border-b-2 border-r-2 p-2 w-15 border-[#A3BAC2]'>No</th>
                                     <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2] text-wrap'>Question</th>

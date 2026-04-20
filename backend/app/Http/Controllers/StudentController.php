@@ -14,6 +14,8 @@ class StudentController extends Controller
     public function index()
     {
         $students = Student::all();
+        $students = Student::with('workshop')->get();
+
         return response()->json([
             'success'=> true,
             'message'=> 'Success',
@@ -33,6 +35,7 @@ class StudentController extends Controller
             'nik' => 'required',
             'email' => 'required|email|unique:users',
             'date_of_birth' => 'required|date',
+            'workshop_id' => 'required',
         ]);
 
         try{
@@ -43,6 +46,7 @@ class StudentController extends Controller
                 'nik' => $request->nik,
                 'email' => $request->email,
                 'date_of_birth' => $request->date_of_birth,
+                'workshop_id' => $request->workshop_id,
                 'joined_at' => now(),
             ]);
 
@@ -74,7 +78,7 @@ class StudentController extends Controller
      */
     public function show(string $id)
     {
-        $student = Student::find($id);
+        $student = Student::with('workshop')->find($id);
 
         if(!$student){
             return response()->json([
@@ -111,6 +115,7 @@ class StudentController extends Controller
             'nik' => 'required',
             'email' => 'required|email|unique:students,email,' . $student->id,
             'date_of_birth' => 'required|date',
+            'workshop_id' => 'required',
         ]);
 
         try{
@@ -121,6 +126,7 @@ class StudentController extends Controller
                 'nik' => $request->nik,
                 'email' => $request->email,
                 'date_of_birth' => $request->date_of_birth,
+                'workshop_id' => $request->workshop_id,
                 'joined_at' => now(),
             ]);
 
