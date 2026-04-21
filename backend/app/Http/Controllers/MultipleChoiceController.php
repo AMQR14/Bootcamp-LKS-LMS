@@ -28,12 +28,14 @@ class MultipleChoiceController extends Controller
         $request->validate([
             'choice_text'=> 'required',
             'is_correct'=> 'required|boolean',
+            'question_id'=> 'required',
         ]);
 
         try{
             $multipleChoice = MultipleChoice::create([
                 'choice_text'=> $request->choice_text,
                 'is_correct'=> $request->is_correct,
+                'question_id'=> $request->question_id,
             ]);
             return response()->json([
                 'success'=> true,
@@ -86,12 +88,14 @@ class MultipleChoiceController extends Controller
         $request->validate([
             'choice_text'=> 'required',
             'is_correct'=> 'required|boolean',
+            'question_id'=> 'required',
         ]);
 
         try{
             $multipleChoice->update([
                 'choice_text'=> $request->choice_text,
                 'is_correct'=> $request->is_correct,
+                'question_id'=> $request->question_id,
             ]);
             return response()->json([
                 'success'=> true,

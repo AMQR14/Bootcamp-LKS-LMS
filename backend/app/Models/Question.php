@@ -20,12 +20,12 @@ class Question extends Model
 
     public function answer(): HasMany
     {
-        return $this->belongsTo(Answer::class , 'question_id');
+        return $this->hasMany(Answer::class , 'question_id');
     } 
 
     public function multipleChoice(): HasMany
     {
-        return $this->belongsTo(multipleChoice::class , 'question_id');
+        return $this->hasMany(multipleChoice::class , 'question_id');
     } 
 }
 

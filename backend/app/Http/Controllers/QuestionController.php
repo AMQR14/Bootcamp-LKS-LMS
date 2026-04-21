@@ -13,6 +13,7 @@ class QuestionController extends Controller
     public function index()
     {
         $questions = Question::all();
+        $questions = Question::with('multipleChoice')->get();
 
         return response()->json([
             'success'=> true,
@@ -28,11 +29,13 @@ class QuestionController extends Controller
     {
         $request->validate([
             'question'=> 'required',
+            'exam_id'=> 'required',
         ]);
 
         try{
             $question = Question::create([
                 'question'=> $request->question,
+                'exam_id'=> $request->exam_id,
             ]);
             return response()->json([
                 'success'=> true,
@@ -52,7 +55,7 @@ class QuestionController extends Controller
      */
     public function show(string $id)
     {
-        $question = Question::find($id);
+        $question = Question::with('multipleChoice')->find($id);
 
         if(!$question){
             return response()->json([
@@ -73,7 +76,7 @@ class QuestionController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $question = Question::find($id);
+        $question = Question::with('multipleChoice')->find($id);
 
         if(!$question){
             return response()->json([
@@ -84,11 +87,13 @@ class QuestionController extends Controller
 
         $request->validate([
             'question'=> 'required',
+            'exam_id'=> 'required',
         ]);
 
         try{
             $question->update([
                 'question'=> $request->question,
+                'exam_id'=> $request->exam_id
             ]);
             return response()->json([
                 'success'=> true,
@@ -119,6 +124,7 @@ class QuestionController extends Controller
 
         try{
             $question->delete();
+            $question->multipleChoice()->delete();
             return response()->json([
                 'success'=> true,
                 'message'=> 'question deleted',

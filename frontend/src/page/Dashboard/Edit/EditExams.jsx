@@ -8,17 +8,18 @@ export default function EditExams(){
             name: '',
             start_time: '',
             end_time: '',
+            course_id: '',
         })
         const[error, setError] = useState({})
         const[loading, setLoading] = useState(true)
         const[saving, setSaving] = useState(false)
         const navigate = useNavigate()
-        const {id} = useParams()
+        const {courseid, classid, examid} = useParams()
     
         useEffect(()=>{
             async function fetchCourse() {
                 try{
-                    const res = await api.get(`/exams/${id}`)
+                    const res = await api.get(`/exams/${examid}`)
                     setForm(res.data.exam)
                 }finally{
                     setLoading(false)
@@ -32,12 +33,13 @@ export default function EditExams(){
             setError({})
             setSaving(true)
             try{
-                await api.put(`/exams/${id}`, {
+                await api.put(`/exams/${examid}`, {
                     name: form.name,
                     start_time: form.start_time,
                     end_time: form.end_time,
+                    course_id: courseid,
                 })
-                navigate('/admin/dashboard/exams')
+                navigate(`/admin/dashboard/classes/${classid}/courses/${courseid}/exams`)
             }catch(err){
                 if(err.response.status == 422){
                     setError(err.response.data.errors)

@@ -1,5 +1,5 @@
 import DashboardLayout from '../../../layouts/DashboardLayout'
-import {Link, useNavigate} from 'react-router-dom'
+import {Link, useNavigate, useParams} from 'react-router-dom'
 import {Plus} from 'lucide-react'
 import { useState } from 'react'
 import api from '../../../lib/api'
@@ -14,6 +14,7 @@ export default function CreateExams(){
     const[error, setError] = useState({})
     const[loading, setLoading] = useState(false)
     const navigate = useNavigate()
+    const {classid, courseid} = useParams() 
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -22,11 +23,11 @@ export default function CreateExams(){
         try{
             await api.post('/exams', {
                 name:form.name,
-                course_id: form.course_id,
+                course_id: courseid,
                 start_time:form.start_time,
                 end_time:form.end_time
             })
-            navigate('/admin/dashboard/exams')
+            navigate(`/admin/dashboard/classes/${classid}/courses/${courseid}/exams`)
         }catch(err){
             if(err.response.status == 422){
                 setError(err.response.data.errors)
@@ -47,12 +48,6 @@ export default function CreateExams(){
                                 <div className='flex flex-col justify-center gap-5'>
                                     <div className='flex flex-col gap-2'>
                                         <label htmlFor="" className='font-bold'>Name:</label>
-                                        <input type="text" placeholder='Enter exam name' className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]'
-                                        onChange={e => setForm({...form, name:e.target.value})}/>
-                                        {error.name && <p className='text-red-500'>{error.name[0]}</p>}
-                                    </div>
-                                    <div className='flex flex-col gap-2'>
-                                        <label htmlFor="" className='font-bold'>Course:</label>
                                         <input type="text" placeholder='Enter exam name' className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]'
                                         onChange={e => setForm({...form, name:e.target.value})}/>
                                         {error.name && <p className='text-red-500'>{error.name[0]}</p>}

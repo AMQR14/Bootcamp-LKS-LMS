@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
 import Login from './page/Login'
 import LandingPage from "./page/LandingPage"
 import Courses from "./page/Courses"
@@ -28,7 +28,8 @@ import EditExams from "./page/Dashboard/Edit/EditExams"
 import CreateExams from "./page/Dashboard/Create/CreateExams"
 import DetailTeachers from "./page/Dashboard/Detail/DetailTeacher"
 import DetailStudent from "./page/Dashboard/Detail/DetailStudent"
-import { AuthProvider } from "./contexts/AuthContext"
+import { AuthProvider, useAuth } from "./contexts/AuthContext"
+import { useNavigate } from "react-router-dom"
 
 function AppRoutes(){
   return (
@@ -55,9 +56,9 @@ function AppRoutes(){
       <Route path="/admin/dashboard/students/:id/edit" element={<EditStudents/>}/>
       <Route path="/admin/dashboard/students/:id/detail" element={<DetailStudent/>}/>
       
-      <Route path="/admin/dashboard/questions" element={<Questions/>} /> 
-      <Route path="/admin/dashboard/questions/create" element={<CreateQuestions/>}/>
-      <Route path="/admin/dashboard/questions/:id/edit" element={<EditQuestions/>}/>
+      <Route path="/admin/dashboard/classes/:classid/courses/:courseid/exams/:examid/questions" element={<Questions/>} /> 
+      <Route path="/admin/dashboard/classes/:classid/courses/:courseid/exams/:examid/questions/create" element={<CreateQuestions/>}/>
+      <Route path="/admin/dashboard/classes/:classid/courses/:courseid/exams/:examid/questions/:questionid/edit" element={<EditQuestions/>}/>
 
       <Route path="/admin/dashboard/users" element={<UserDashboard/>}/>
       <Route path="/admin/dashboard/users/create" element={<CreateUsers/>}/>

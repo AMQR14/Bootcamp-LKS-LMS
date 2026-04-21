@@ -13,6 +13,9 @@ class ExamController extends Controller
     public function index()
     {
         $exams = Exam::all();
+        $exams = Exam::with('question.multipleChoice')->get();
+        
+        
 
         return response()->json([
             'success'=> true,
@@ -58,7 +61,7 @@ class ExamController extends Controller
      */
     public function show(string $id)
     {
-        $exam = Exam::find($id);
+        $exam = Exam::with('question.multipleChoice')->find($id);
 
         if(!$exam){
             return response()->json([

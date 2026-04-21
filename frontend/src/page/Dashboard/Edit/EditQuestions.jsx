@@ -3,27 +3,57 @@ import DashboardLayout from '../../../layouts/DashboardLayout'
 import { useNavigate, useParams } from 'react-router-dom'
 import api from '../../../lib/api'
 
-export default function editquestions(){
+export default function EditQuestion(){
     const [form, setForm] = useState({
-        question: ''
+        question: '',
+        exam_id: ''
+    })
+    const [formMul, setFormMul] = useState({
+        choice_text: ['', '', '', ''], 
+        is_correct: 0,              
+        exam_id: '',
+        question_id: ''
     })
     const [error, setError] = useState({})
-    const [loading, setLoading] = useState(true)
-    const [saving, setSaving] = useState(false)
-    const [checked, setChecked] = useState('mul-choice')
+    const [loading, setLoading] = useState(false)
+    const [checked, setChecked] = useState('')
     const navigate = useNavigate();
-    const {id} = useParams()
+    const {classid, courseid, examid, questionid} = useParams() 
+    const [mult, setMult] = useState([])
 
     const handleChange = (e) =>{
         setChecked(e.target.value)
     }
 
-    useEffect(()=>{
+    const handleChoiceChange = (index, value) => {
+        const updated = [...formMul.choice_text]
+        updated[index] = value
+        setFormMul({...formMul, choice_text: updated})
+    }
+
+    useEffect(() => {
         async function fetchQuestion() {
-            try{
-                const res = await api.get(`/questions/${id}`)
-                setForm(res.data.question)
-            }finally{
+            setLoading(true)
+            try {
+                const res = await api.get(`/questions/${questionid}`)
+                const question = res.data.question
+
+                setForm(question)
+
+                if (question.multiple_choice?.length > 0) {
+                    const choices = question.multiple_choice
+                    setMult(choices)
+                    setChecked('mul-choice')
+                    setFormMul({
+                        choice_text: choices.map(c => c.choice_text),
+                        is_correct: choices.findIndex(c => c.is_correct === 1),
+                        exam_id: question.exam_id,
+                        question_id: question.id
+                    })
+                } else {
+                    setChecked('essay')
+                }
+            } finally {
                 setLoading(false)
             }
         }
@@ -34,85 +64,112 @@ export default function editquestions(){
         e.preventDefault()
         setError({})
         setLoading(true)
-        try{
-            await api.put(`/questions/${id}`, {
-                question: form.question
+        try {
+            await api.put(`/questions/${questionid}`, {
+                question: form.question,
+                exam_id: examid
             })
-            navigate('/admin/dashboard/questions')
-        }catch(err){
-            if(err.response.status == 422){
+
+            if (checked === 'mul-choice') {
+                await Promise.all(
+                    formMul.choice_text.map((choice, index) =>
+                        api.put(`/multiplechoices/${mult[index].id}`, {
+                            choice_text: choice,
+                            is_correct: index === formMul.is_correct ? 1 : 0,
+                            question_id: questionid
+                        })
+                    )
+                )
+            } else if (checked === 'essay' && mult.length > 0) {
+                await Promise.all(
+                    mult.map(choice =>
+                        api.delete(`/multiplechoices/${choice.id}`)
+                    )
+                )
+            }
+
+            navigate(`/admin/dashboard/classes/${classid}/courses/${courseid}/exams/${examid}/questions`)
+        } catch(err) {
+            if(err.response?.status === 422){
                 setError(err.response.data.errors)
             }
-        }finally{
+        } finally {
             setLoading(false)
         }
     }
 
     return (
         <DashboardLayout>
-            <main className="flex text-[#3f454c]" >
-                    <div className="m-8 md:mx-20 w-full ">
-                        <h1 className='font-bold text-2xl text-[#3f454c]'>Edit Questions</h1>
-                        <div className='my-6 text-[#3f454c]'>
-                            <form action="" className=' p-4 rounded-xl shadow-md h-full' onSubmit={handleSubmit}>
-                                <div className='flex flex-col justify-center gap-5'>
-                                    <div className='flex flex-col gap-2'>
-                                        <label htmlFor="" className='font-bold'>Question:</label>
-                                        <textarea type="text" value={loading ? 'Loading...' : form.question} placeholder='Enter question' className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]'
-                                        onChange={e => setForm({...form, question:e.target.value})}/>
-                                        {error.question && <p>{error.question[0]}</p>}
-                                    </div>
-                                    <div className=' flex gap-6'>
-                                        <div className='flex gap-1'>
-                                            <input type="radio" name='question-type' value='mul-choice' checked={checked == 'mul-choice'} onChange={handleChange}/>
-                                            <label>Multiple Choice</label>
-                                        </div>
-                                        <div className='flex gap-1'>
-                                            <input type="radio" name='question-type' value='essay' checked={checked == 'essay'} onChange={handleChange}/>
-                                            <label>Essay</label>
-                                        </div>
-                                    </div>
-                                    {checked == 'mul-choice' ?
-                                        <div className='flex flex-col gap-6'>
-                                            <div className='flex gap-1 border-[#E0E8EB] border-2 rounded p-1 w-full md:w-100'>
-                                                <div className='flex gap-2 px-2 w-full'>
-                                                    <input type="radio" name='question'/>
-                                                    <input type="text" className='w-full outline-none' placeholder='Enter choice 1'/>
-                                                </div>
-                                            </div>
-                                            <div className='flex gap-1 border-[#E0E8EB] border-2 rounded p-1 w-full md:w-100'>
-                                                <div className='flex gap-2 px-2 w-full'>
-                                                    <input type="radio" name='question'/>
-                                                    <input type="text" className='w-full outline-none' placeholder='Enter choice 2'/>
-                                                </div>
-                                            </div>
-                                            <div className='flex gap-1 border-[#E0E8EB] border-2 rounded p-1 w-full md:w-100'>
-                                                <div className='flex gap-2 px-2 w-full'>
-                                                    <input type="radio" name='question'/>
-                                                    <input type="text" className='w-full outline-none' placeholder='Enter choice 3'/>
-                                                </div>
-                                            </div>
-                                            <div className='flex gap-1 border-[#E0E8EB] border-2 rounded p-1 w-full md:w-100'>
-                                                <div className='flex gap-2 px-2 w-full'>
-                                                    <input type="radio" name='question'/>
-                                                    <input type="text" className='w-full outline-none' placeholder='Enter choice 4'/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    : ''}
-
-                                    {checked == 'essay' ?
-                                        <div className='flex flex-col gap-2'>
-                                        <label htmlFor="" className='font-bold'>Answer:</label>
-                                        <textarea type="text" placeholder='Enter answer' className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]'/>
-                                        </div>
-                                    : ''}
-                                    <button className='p-3 bg-[#60848f] text-white font-bold rounded-md hover:bg-[#7098a4] transition-all mt-10' type='submit'>Edit</button>
+            <main className="flex text-[#3f454c]">
+                <div className="m-8 md:mx-20 w-full">
+                    <h1 className='font-bold text-2xl text-[#3f454c]'>Edit Question</h1>
+                    <div className='my-6 text-[#3f454c]'>
+                        <form action="" className='p-4 rounded-xl shadow-md h-full' onSubmit={handleSubmit}>
+                            <div className='flex flex-col justify-center gap-5'>
+                                <div className='flex flex-col gap-2'>
+                                    <label htmlFor="" className='font-bold'>Question:</label>
+                                    <textarea
+                                        type="text"
+                                        placeholder='Enter question'
+                                        value={loading ? 'Loading...' : form.question}
+                                        className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]'
+                                        onChange={e => setForm({...form, question: e.target.value})}
+                                    />
+                                    {error.question && <p className='text-red-500'>{error.question[0]}</p>}
                                 </div>
-                            </form>
-                        </div>
+
+                                <div className='flex gap-6'>
+                                    <div className='flex gap-1'>
+                                        <input type="radio" name='question-type' value='mul-choice' checked={checked === 'mul-choice'} onChange={handleChange}/>
+                                        <label>Multiple Choice</label>
+                                    </div>
+                                    <div className='flex gap-1'>
+                                        <input type="radio" name='question-type' value='essay' checked={checked === 'essay'} onChange={handleChange}/>
+                                        <label>Essay</label>
+                                    </div>
+                                </div>
+
+                                {checked === 'mul-choice' &&
+                                    <div className='flex flex-col gap-6'>
+                                        <p className='text-gray-400'>Must pick one correct answer</p>
+                                        {[0, 1, 2, 3].map(index => (
+                                            <div key={index} className='flex items-center gap-4'>
+                                                <div className='flex gap-1 border-[#E0E8EB] border-2 rounded p-1 w-full md:w-100'>
+                                                    <div className='flex gap-2 px-2 w-full'>
+                                                        <input
+                                                            type="radio"
+                                                            name='correct-answer'
+                                                            value={index}
+                                                            checked={formMul.is_correct === index}
+                                                            onChange={() => setFormMul({...formMul, is_correct: index})}
+                                                        />
+                                                        <input
+                                                            type="text"
+                                                            className='w-full outline-none'
+                                                            placeholder={`Enter choice ${index + 1}`}
+                                                            value={formMul.choice_text[index]}
+                                                            onChange={e => handleChoiceChange(index, e.target.value)}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                        {error.choice_text && <p className='text-red-500'>{error.choice_text[0]}</p>}
+                                    </div>
+                                }
+
+                                <button
+                                    className='p-3 bg-[#60848f] text-white font-bold rounded-md hover:bg-[#7098a4] transition-all mt-10'
+                                    type='submit'
+                                    disabled={loading}
+                                >
+                                    {loading ? 'Saving...' : 'Save Changes'}
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                </main>
+                </div>
+            </main>
         </DashboardLayout>
     )
 }

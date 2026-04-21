@@ -40,7 +40,7 @@ export default function CoursesDashboard(){
             <DashboardLayout>
                 <main className="flex">
                     <div className="m-8 md:mx-20 w-full overflow-hidden">
-                        <h1 className='font-bold text-2xl text-[#3f454c]'>{classes.name} Dashboard</h1>
+                        <h1 className='font-bold text-2xl text-[#3f454c]'>{classes.name} Courses Dashboard</h1>
                         <div>
                             <div className='flex justify-end gap-2'>
                                 <Link to={'/admin/dashboard/classes'} className='flex justify-center items-center w-14 h-10 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md '><MoveLeft className='size-7 stroke-2'/></Link>
