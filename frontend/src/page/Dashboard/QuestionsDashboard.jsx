@@ -42,7 +42,7 @@ export default function Questions(){
                 <h1 className='font-bold text-2xl text-[#3f454c]'>{exam.name} Questions Dashboard</h1>
                 <div>
                     <div className='flex justify-end gap-2'>
-                        <Link to={`/admin/dashboard/classes/${classid}/courses/${courseid}/exams`} className='flex justify-center items-center w-14 h-10 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md '><MoveLeft className='size-7 stroke-2'/></Link>
+                        <Link to={`/admin/dashboard/exams`} className='flex justify-center items-center w-14 h-10 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md '><MoveLeft className='size-7 stroke-2'/></Link>
                         <Link to={`/admin/dashboard/classes/${classid}/courses/${courseid}/exams/${examid}/questions/create`} className='flex justify-center items-center w-14 h-10 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md '><Plus className='size-7 stroke-2'/></Link>
                     </div>
                 </div>

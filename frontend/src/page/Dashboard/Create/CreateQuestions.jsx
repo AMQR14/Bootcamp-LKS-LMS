@@ -41,8 +41,8 @@ export default function createquestions(){
                 exam_id: examid
             })
             const newQuestionId = res.data.question.id
+            
             if (checked === 'mul-choice'){
-                
                 await Promise.all(
                     formMul.choice_text.map((choice, index) =>
                         api.post('/multiplechoices', {

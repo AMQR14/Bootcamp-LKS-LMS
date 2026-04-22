@@ -131,20 +131,20 @@ export default function HomeLayout({children}){
                                 </div>
                             </div>
                         </Link> */}
-                        {/* <Link to={'/admin/dashboard/exams'}>
+                        <Link to={'/admin/dashboard/exams'}>
                             <div className={`hover:bg-[#E0E8EB] hover:border-l-8 hover:font-bold h-full w-full transition-all text-[#3f454c] font-semibold py-2 ${location.pathname == '/admin/dashboard/exams' ? 'border-l-8 ' : 'none'}`}>
                                 <div className="flex ml-8 items-center gap-1">
                                     <FileQuestion color="#3f454c" size={18}/>Exams
                                 </div>
                             </div>
-                        </Link> */}
-                        <Link to={'/admin/dashboard/questions'}>
+                        </Link>
+                        {/* <Link to={'/admin/dashboard/questions'}>
                             <div className={`hover:bg-[#E0E8EB] hover:border-l-8 hover:font-bold h-full w-full transition-all text-[#3f454c] font-semibold py-2 ${location.pathname == '/admin/dashboard/questions' ? 'border-l-8 ' : 'none'}`}>
                                 <div className="flex ml-8 items-center gap-1">
                                     <CircleQuestionMark color="#3f454c" size={18}/>Questions
                                 </div>
                             </div>
-                        </Link>
+                        </Link> */}
                     </div>
                 </aside>
                 {children}

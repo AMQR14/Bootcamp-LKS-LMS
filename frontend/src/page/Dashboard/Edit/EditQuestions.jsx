@@ -16,6 +16,7 @@ export default function EditQuestion(){
     })
     const [error, setError] = useState({})
     const [loading, setLoading] = useState(false)
+    const [saving, setSaving] = useState(false)
     const [checked, setChecked] = useState('')
     const navigate = useNavigate();
     const {classid, courseid, examid, questionid} = useParams() 
@@ -63,7 +64,7 @@ export default function EditQuestion(){
     async function handleSubmit(e) {
         e.preventDefault()
         setError({})
-        setLoading(true)
+        setSaving(true)
         try {
             await api.put(`/questions/${questionid}`, {
                 question: form.question,
@@ -71,30 +72,47 @@ export default function EditQuestion(){
             })
 
             if (checked === 'mul-choice') {
-                await Promise.all(
-                    formMul.choice_text.map((choice, index) =>
-                        api.put(`/multiplechoices/${mult[index].id}`, {
-                            choice_text: choice,
-                            is_correct: index === formMul.is_correct ? 1 : 0,
-                            question_id: questionid
-                        })
+                {console.log(form)}
+                {form.multiple_choice?.length == 0 ?                     
+                    await Promise.all(
+                        formMul.choice_text.map((choice, index) =>
+                            api.post(`/multiplechoices`, {
+                                choice_text: choice,
+                                is_correct: index === formMul.is_correct ? 1 : 0,
+                                question_id: questionid
+                                
+                            })
+                        )
                     )
-                )
+                :
+                    await Promise.all(
+                        formMul.choice_text.map((choice, index) =>
+                            api.put(`/multiplechoices/${mult[index].id}`, {
+                                choice_text: choice,
+                                is_correct: index === formMul.is_correct ? 1 : 0,
+                                question_id: questionid
+                                
+                            })
+                        )
+                    )
+                }
+                
             } else if (checked === 'essay' && mult.length > 0) {
                 await Promise.all(
                     mult.map(choice =>
                         api.delete(`/multiplechoices/${choice.id}`)
                     )
+                    
                 )
             }
 
             navigate(`/admin/dashboard/classes/${classid}/courses/${courseid}/exams/${examid}/questions`)
         } catch(err) {
-            if(err.response?.status === 422){
+            if(err.response.status === 422){
                 setError(err.response.data.errors)
             }
         } finally {
-            setLoading(false)
+            setSaving(false)
         }
     }
 
@@ -128,7 +146,7 @@ export default function EditQuestion(){
                                         <label>Essay</label>
                                     </div>
                                 </div>
-
+                                
                                 {checked === 'mul-choice' &&
                                     <div className='flex flex-col gap-6'>
                                         <p className='text-gray-400'>Must pick one correct answer</p>
@@ -161,9 +179,9 @@ export default function EditQuestion(){
                                 <button
                                     className='p-3 bg-[#60848f] text-white font-bold rounded-md hover:bg-[#7098a4] transition-all mt-10'
                                     type='submit'
-                                    disabled={loading}
+                                    disabled={saving}
                                 >
-                                    {loading ? 'Saving...' : 'Save Changes'}
+                                    {saving ? 'Saving...' : 'Save Changes'}
                                 </button>
                             </div>
                         </form>

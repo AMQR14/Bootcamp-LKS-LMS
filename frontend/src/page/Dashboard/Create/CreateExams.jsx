@@ -1,7 +1,7 @@
 import DashboardLayout from '../../../layouts/DashboardLayout'
 import {Link, useNavigate, useParams} from 'react-router-dom'
 import {Plus} from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import api from '../../../lib/api'
 
 export default function CreateExams(){
@@ -11,10 +11,40 @@ export default function CreateExams(){
         start_time: '',
         end_start_time: ''
     })
+    const [workshops, setWorkshops] = useState([])
+    const [courses, setCourses] = useState([])
+    const [workshopid, setWorkshopId] = useState('')
     const[error, setError] = useState({})
     const[loading, setLoading] = useState(false)
     const navigate = useNavigate()
     const {classid, courseid} = useParams() 
+    // const [exam, setExam] = useState([])
+
+    const getWorkId = (e) =>{
+        setWorkshopId(e.target.value)
+        console.log(workshopid)
+    }
+
+    async function fetchClass() {
+        const res = await api.get('/workshops')
+        setWorkshops(res.data.classes)
+        // console.log(res.data.classes)
+    }
+
+    async function fetchCourse() {
+        const res = await api.get(`/workshops/${workshopid}`)
+        setCourses(res.data.class.courses)
+    }
+
+    useEffect(()=>{
+        fetchClass();
+    }, [])
+    
+    useEffect(()=>{
+        if(workshopid){
+            fetchCourse();
+        }
+    }, [workshopid])
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -23,11 +53,11 @@ export default function CreateExams(){
         try{
             await api.post('/exams', {
                 name:form.name,
-                course_id: courseid,
+                course_id: form.course_id,
                 start_time:form.start_time,
                 end_time:form.end_time
             })
-            navigate(`/admin/dashboard/classes/${classid}/courses/${courseid}/exams`)
+            navigate(`/admin/dashboard/exams`)
         }catch(err){
             if(err.response.status == 422){
                 setError(err.response.data.errors)
@@ -64,6 +94,27 @@ export default function CreateExams(){
                                         onChange={e => setForm({...form, end_time:e.target.value})}/>
                                         {error.end_time && <p className='text-red-500'>{error.end_time[0]}</p>}
                                     </div>
+                                    <div className='flex flex-col gap-2'>
+                                        <label htmlFor="" className='font-bold'>Class:</label>
+                                        <select name="" id="" className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]' value={workshopid} onChange={getWorkId}>
+                                                <option value="" disabled>Select Class</option>
+                                            {workshops.map((workshop)=>(
+                                                <option value="" key={workshop.id} value={workshop.id}>{workshop.name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    {workshopid == '' ? '' :
+                                        <div className='flex flex-col gap-2'>
+                                            <label htmlFor="" className='font-bold'>Course:</label>
+                                            <select name="" id="" className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]' onChange={e => setForm({...form, course_id:e.target.value})}>
+                                                <option value="">{courses.length == 0 ? 'Class have no course' : 'Select course'}</option>
+                                                {courses.map((course)=>(
+                                                    <option value={course.id} key={course.id}>{course.name}</option>
+                                                ))}
+                                            </select>
+                                            {error.course_id && <p className='text-red-500'>{error.course_id[0]}</p>}
+                                        </div>
+                                    }
                                     <button className='p-3 bg-[#60848f] text-white font-bold rounded-md hover:bg-[#7098a4] transition-all mt-10' type='submit' disabled={loading}>{loading ? 'Loading...' : 'Create'}</button>
                                 </div>
                             </form>

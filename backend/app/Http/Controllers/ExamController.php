@@ -13,7 +13,7 @@ class ExamController extends Controller
     public function index()
     {
         $exams = Exam::all();
-        $exams = Exam::with('question.multipleChoice')->get();
+        $exams = Exam::with('question.multipleChoice', 'course.workshop')->get();
         
         
 
@@ -82,7 +82,7 @@ class ExamController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $exam = Exam::find($id);
+        $exam = Exam::with('question.multipleChoice', 'course.workshop')->find($id);
 
         if(!$exam){
             return response()->json([
@@ -94,14 +94,16 @@ class ExamController extends Controller
         $request->validate([
             'name'=> 'required',
             'start_time'=> 'required|date_format:H:i:s',
-            'end_time'=> 'required|date_format:H:i:s'
+            'end_time'=> 'required|date_format:H:i:s',
+            'course_id'=> 'required'
         ]);
 
         try{
             $exam->update([
                 'name'=> $request->name,
                 'start_time'=> $request->start_time,
-                'end_time'=> $request->end_time
+                'end_time'=> $request->end_time,
+                'course_id'=> $request->course_id
             ]);
             return response()->json([
                 'success'=> true,

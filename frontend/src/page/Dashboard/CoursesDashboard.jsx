@@ -64,7 +64,7 @@ export default function CoursesDashboard(){
                                             <td className='border-e border-[#A3BAC2] border-b p-2'>{course.name}</td>
                                             <td className='border-b p-2 px-6 border-[#A3BAC2]'>
                                                 <div className='flex justify-center items-center gap-3'>
-                                                    <Link to={`/admin/dashboard/classes/${classid}/courses/${course.id}/exams`} className='flex justify-center items-center w-10 h-8 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md'><Eye/></Link>
+                                                    {/* <Link to={`/admin/dashboard/classes/${classid}/courses/${course.id}/exams`} className='flex justify-center items-center w-10 h-8 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md'><Eye/></Link> */}
                                                     <Link to={`/admin/dashboard/classes/${classes.id}/courses/${course.id}/edit`} className='flex justify-center items-center w-10 h-8 bg-[#5ca3b8] hover:bg-[#66b2c9] transition-all text-white font-semibold rounded-md'><Edit/></Link>
                                                     <button className='flex justify-center items-center w-10 h-8 bg-[#d25252] hover:bg-[#ea5e5e] transition-all text-white font-semibold rounded-md' onClick={()=> handleDelete(course.id)}><Trash/></button>
                                                 </div>

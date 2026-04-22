@@ -68,8 +68,8 @@ function AppRoutes(){
       <Route path="/admin/dashboard/class/create" element={<CreateClasses/>}/>
       <Route path="/admin/dashboard/class/:id/edit" element={<EditClasses/>}/>
       
-      <Route path="/admin/dashboard/classes/:classid/courses/:courseid/exams" element={<ExamsDashboard/>}/>
-      <Route path="/admin/dashboard/classes/:classid/courses/:courseid/exams/create" element={<CreateExams/>}/>
+      <Route path="/admin/dashboard/exams" element={<ExamsDashboard/>}/>
+      <Route path="/admin/dashboard/exams/create" element={<CreateExams/>}/>
       <Route path="/admin/dashboard/classes/:classid/courses/:courseid/exams/:examid/edit" element={<EditExams/>}/>
     </Routes>
   )
