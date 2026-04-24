@@ -97,7 +97,7 @@ export default function CreateExams(){
                                     <div className='flex flex-col gap-2'>
                                         <label htmlFor="" className='font-bold'>Class:</label>
                                         <select name="" id="" className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]' value={workshopid} onChange={getWorkId}>
-                                                <option value="" disabled>Select Class</option>
+                                            <option value="" disabled>Select Class</option>
                                             {workshops.map((workshop)=>(
                                                 <option value="" key={workshop.id} value={workshop.id}>{workshop.name}</option>
                                             ))}

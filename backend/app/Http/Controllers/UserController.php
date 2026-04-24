@@ -59,7 +59,7 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        $user = User::find($id);
+        $user = User::with('student', 'teacher')->find($id);
 
         if(!$user){
             return response()->json([

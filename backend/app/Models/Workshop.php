@@ -24,6 +24,6 @@ class Workshop extends Model
 
     public function teachers(): HasMany
     {
-        return $this->hasMany(Student::class, 'workshop_id');
+        return $this->hasMany(Teacher::class, 'workshop_id');
     }
 }

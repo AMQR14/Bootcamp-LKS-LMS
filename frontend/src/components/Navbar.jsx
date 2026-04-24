@@ -28,18 +28,15 @@ export default function Navbar(){
                 <h1 className="hidden font-bold text-3xl ml-7 text-[#3f454c] sm:block">IPSUM</h1>
                 <div className="flex row gap-8 justify-center items-center sm:mr-7 mr-5">
                     <ul className="flex-row text-[#3f454c] gap-6 font-semibold hidden sm:flex">
-                        <li className={`hover:text-[#616975] transition-all cursor-pointer ${location.pathname == '/home' ? 'border-b-2' : 'none' }`}>
+                        <li className={`hover:text-[#616975] transition-all cursor-pointer ${location.pathname == '/home' ? 'border-b-3 font-bold pb-1' : 'none' }`}>
                             <Link to={'/home'}>Home</Link>
                         </li>
-                        <li className={`hover:text-[#616975] transition-all cursor-pointer ${location.pathname == '/courses' ? 'border-b-2' : 'none' }`}>
+                        <li className={`hover:text-[#616975] transition-all cursor-pointer ${location.pathname == '/courses' ? ' pb-1 font-bold border-b-3' : 'none' }`}>
                             <Link to={'/courses'}>Courses</Link>
                         </li>
-                        <li className={`hover:text-[#616975] transition-all cursor-pointer ${location.pathname == '/exams1' ? 'border-b-2' : 'none' }`}>
-                            <Link to={'/courses'}>Exams</Link>
-                        </li>
-                        <li className={`hover:text-[#616975] transition-all cursor-pointer ${location.pathname == '/teachers' ? 'border-b-2' : 'none' }`}>
+                        {/* <li className={`hover:text-[#616975] transition-all cursor-pointer ${location.pathname == '/teachers' ? 'border-b-2' : 'none' }`}>
                             <Link to={'/teachers'}>Teachers</Link>
-                        </li>
+                        </li> */}
                     </ul>
                     <div className="w-0.5 h-8 bg-[#A3BAC2]"></div>
                     <div className="flex justify-center items-center gap-5">

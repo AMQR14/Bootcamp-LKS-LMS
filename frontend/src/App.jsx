@@ -28,49 +28,124 @@ import EditExams from "./page/Dashboard/Edit/EditExams"
 import CreateExams from "./page/Dashboard/Create/CreateExams"
 import DetailTeachers from "./page/Dashboard/Detail/DetailTeacher"
 import DetailStudent from "./page/Dashboard/Detail/DetailStudent"
+import StudentDashboard from "./page/Student/StudentDashboard"
+import TeacherDashboard from "./page/Teacher/TeacherDashboard"
+import StudentProfile from "./page/Student/StudentProfile"
+import StudentCourse from "./page/Student/StudentCourse"
+
+
 import { AuthProvider, useAuth } from "./contexts/AuthContext"
+import NotFound from "./page/NotFound"
 import { useNavigate } from "react-router-dom"
+import { Outlet } from "react-router-dom"
+
+function AdminRoute(){
+  const {user, loading} = useAuth()
+  const token = localStorage.getItem('token')
+
+  if(loading) return <div className="flex mt-15 justify-center items-center"> <div className="w-30 h-30 bg-white border-b-6 border-r-6 border-[#a3bac2] rounded-full animate-spin"></div> </div>
+  
+  if(!token) return <Navigate to={'/home'}/>
+  if(user.user.role != 'admin') return <Navigate to={'/home'}/>
+
+  return <Outlet/>
+}
+
+function StudentRoute(){
+  const {user, loading} = useAuth()
+  const token = localStorage.getItem('token')
+
+  if(loading) return <div className="flex mt-15 justify-center items-center"> <div className="w-30 h-30 bg-white border-b-6 border-r-6 border-[#a3bac2] rounded-full animate-spin"></div> </div>
+  
+  if(!token) return <Navigate to={'/home'}/>
+  if(user.user.role != 'student') return <Navigate to={'/home'}/>
+
+  return <Outlet/>
+}
+
+function TeacherRoute(){
+  const {user, loading} = useAuth()
+  const token = localStorage.getItem('token')
+
+  if(loading) return <div className="flex mt-15 justify-center items-center"> <div className="w-30 h-30 bg-white border-b-6 border-r-6 border-[#a3bac2] rounded-full animate-spin"></div> </div>
+  
+  if(!token) return <Navigate to={'/home'}/>
+  if(user.user.role != 'teacher') return <Navigate to={'/home'}/>
+
+  return <Outlet/>
+}
+
+function PublicRoute(){
+  const {user, loading} = useAuth()
+  const token = localStorage.getItem('token')
+
+  if(loading) return <div className="flex mt-15 justify-center items-center"> <div className="w-30 h-30 bg-white border-b-6 border-r-6 border-[#a3bac2] rounded-full animate-spin"></div> </div>
+
+  if(token) return <Navigate to={user.user?.role == 'admin' ? '/admin/dashboard' : user.user?.role == 'student' ? '/student/dashboard' : '/teacher/dashboard'}/>
+
+  return <Outlet/>
+}
 
 function AppRoutes(){
+  const {user} = useAuth()
+  // console.log(user)
+
   return (
     <Routes>
-      <Route path="/login" element={<Login/>}/>
-      <Route path="/home" element={<LandingPage/>}/>
-      <Route path="/courses" element={<Courses/>}/>
-      <Route path="/teachers" element={<Teachers/>}/>
 
-      <Route path="/dashboard" element={<Dashboard/>}/>
-      <Route path="/admin/dashboard/profile" element={<Profile/>}/>
+      <Route path="*" element={<NotFound/>}/>
 
-      <Route path="/admin/dashboard/classes/:classid/courses" element={<CoursesDashboard/>}/>
-      <Route path="/admin/dashboard/classes/:id/courses/create" element={<CreateCourses/>}/>
-      <Route path="/admin/dashboard/classes/:classid/courses/:courseid/edit" element={<EditCourses/>}/>
+      <Route element={<PublicRoute/>}>
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/home" element={<LandingPage/>}/>
+        <Route path="/courses" element={<Courses/>}/>
+        <Route path="/teachers" element={<Teachers/>}/>
+      </Route>
 
-      <Route path="/admin/dashboard/teachers" element={<TeachersDashboard/>}/>
-      <Route path="/admin/dashboard/teachers/create" element={<CreateTeachers/>}/>
-      <Route path="/admin/dashboard/teachers/:id/edit" element={<EditTeachers/>}/>
-      <Route path="/admin/dashboard/teachers/:id/detail" element={<DetailTeachers/>}/>
+      <Route element={<StudentRoute/>}>
+        <Route path="/student/dashboard" element={<StudentDashboard/>}/>
+        <Route path="/student/dashboard/:id/profile" element={<StudentProfile/>}/>
+        <Route path="/student/dashboard/course/:courseid" element={<StudentCourse/>}/>
+      </Route>
 
-      <Route path="/admin/dashboard/students" element={<StudentsDashboard/>}/>
-      <Route path="/admin/dashboard/students/create" element={<CreateStudents/>}/>
-      <Route path="/admin/dashboard/students/:id/edit" element={<EditStudents/>}/>
-      <Route path="/admin/dashboard/students/:id/detail" element={<DetailStudent/>}/>
+      <Route element={<TeacherRoute/>}>
+        <Route path="/teacher/dashboard" element={<TeacherDashboard/>}/>
+      </Route>
       
-      <Route path="/admin/dashboard/classes/:classid/courses/:courseid/exams/:examid/questions" element={<Questions/>} /> 
-      <Route path="/admin/dashboard/classes/:classid/courses/:courseid/exams/:examid/questions/create" element={<CreateQuestions/>}/>
-      <Route path="/admin/dashboard/classes/:classid/courses/:courseid/exams/:examid/questions/:questionid/edit" element={<EditQuestions/>}/>
+      <Route element={<AdminRoute/>}>
+        <Route path="/admin/dashboard" element={<Dashboard/>}/>
+        <Route path="/admin/dashboard/:id/profile" element={<Profile/>}/>
 
-      <Route path="/admin/dashboard/users" element={<UserDashboard/>}/>
-      <Route path="/admin/dashboard/users/create" element={<CreateUsers/>}/>
-      <Route path="/admin/dashboard/users/:id/edit" element={<EditUsers/>}/>
+        <Route path="/admin/dashboard/classes/:classid/courses" element={<CoursesDashboard/>}/>
+        <Route path="/admin/dashboard/classes/:id/courses/create" element={<CreateCourses/>}/>
+        <Route path="/admin/dashboard/classes/:classid/courses/:courseid/edit" element={<EditCourses/>}/>
 
-      <Route path="/admin/dashboard/classes" element={<ClassDashboard/>}/>
-      <Route path="/admin/dashboard/class/create" element={<CreateClasses/>}/>
-      <Route path="/admin/dashboard/class/:id/edit" element={<EditClasses/>}/>
-      
-      <Route path="/admin/dashboard/exams" element={<ExamsDashboard/>}/>
-      <Route path="/admin/dashboard/exams/create" element={<CreateExams/>}/>
-      <Route path="/admin/dashboard/classes/:classid/courses/:courseid/exams/:examid/edit" element={<EditExams/>}/>
+        <Route path="/admin/dashboard/teachers" element={<TeachersDashboard/>}/>
+        <Route path="/admin/dashboard/teachers/create" element={<CreateTeachers/>}/>
+        <Route path="/admin/dashboard/teachers/:id/edit" element={<EditTeachers/>}/>
+        <Route path="/admin/dashboard/teachers/:id/detail" element={<DetailTeachers/>}/>
+
+        <Route path="/admin/dashboard/students" element={<StudentsDashboard/>}/>
+        <Route path="/admin/dashboard/students/create" element={<CreateStudents/>}/>
+        <Route path="/admin/dashboard/students/:id/edit" element={<EditStudents/>}/>
+        <Route path="/admin/dashboard/students/:id/detail" element={<DetailStudent/>}/>
+        
+        <Route path="/admin/dashboard/classes/:classid/courses/:courseid/exams/:examid/questions" element={<Questions/>} /> 
+        <Route path="/admin/dashboard/classes/:classid/courses/:courseid/exams/:examid/questions/create" element={<CreateQuestions/>}/>
+        <Route path="/admin/dashboard/classes/:classid/courses/:courseid/exams/:examid/questions/:questionid/edit" element={<EditQuestions/>}/>
+
+        <Route path="/admin/dashboard/users" element={<UserDashboard/>}/>
+        <Route path="/admin/dashboard/users/create" element={<CreateUsers/>}/>
+        <Route path="/admin/dashboard/users/:id/edit" element={<EditUsers/>}/>
+
+        <Route path="/admin/dashboard/classes" element={<ClassDashboard/>}/>
+        <Route path="/admin/dashboard/class/create" element={<CreateClasses/>}/>
+        <Route path="/admin/dashboard/class/:id/edit" element={<EditClasses/>}/>
+        
+        <Route path="/admin/dashboard/exams" element={<ExamsDashboard/>}/>
+        <Route path="/admin/dashboard/exams/create" element={<CreateExams/>}/>
+        <Route path="/admin/dashboard/classes/:classid/courses/:courseid/exams/:examid/edit" element={<EditExams/>}/>
+      </Route>
     </Routes>
   )
 }

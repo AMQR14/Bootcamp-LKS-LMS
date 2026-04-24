@@ -21,7 +21,7 @@ export default function Courses(){
 
     return (
         <HomeLayout>
-            <div className="m-5">
+            <div className="m-5 mx-10">
             <h1 className='font-bold text-2xl text-[#3f454c]'>Courses Collection</h1>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 my-5">
                         <div className='group/card w-full h-100 border-2 border-[#E0E8EB] hover:border-[#b8bec1] transition-all rounded-xl' onClick={click} onMouseLeave={hover}>

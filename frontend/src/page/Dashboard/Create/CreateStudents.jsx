@@ -98,6 +98,7 @@ export default function CreateTeachers(){
                                         <label htmlFor="" className='font-bold'>Class:</label>
                                         <select name="" id="" className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]'
                                         onChange={e => setForm({...form, workshop_id:e.target.value})}>
+                                                <option value="" disabled selected>Select Class</option>
                                             {classes.map((classe)=>(
                                                 <option key={classe.id} value={classe.id}>{classe.name}</option>
                                             ))}

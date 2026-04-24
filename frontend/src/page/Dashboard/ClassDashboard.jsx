@@ -44,7 +44,7 @@ export default function ClassDashboard(){
                                 <Link to={'/admin/dashboard/class/create'} className='flex justify-center items-center w-14 h-10 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md '><Plus className='size-7 stroke-2'/></Link>
                             </div>
                         </div>
-                        {loading ? <div>Loading...</div> : classes.length == 0 ? <div className='text-[#5a767f] font-semibold text-md bg-[#e0e8eb] mt-6 rounded-xl p-4 border border-[#b2cbd3]'>There is no classes</div> :
+                        {loading ? <div className="flex mt-15 justify-center items-center"> <div className="w-30 h-30 bg-white border-b-6 border-r-6 border-[#a3bac2] rounded-full animate-spin"></div> </div>  : classes.length == 0 ? <div className='text-[#5a767f] font-semibold text-md bg-[#e0e8eb] mt-6 rounded-xl p-4 border border-[#b2cbd3]'>There is no classes</div> :
                         <div className='my-6 rounded-md border-collapse border-2 overflow-x-auto border-[#A3BAC2]'>
                             <table className='w-full text-[#3f454c]'>
                                 <thead className='text-[#5a767f] bg-[#e0e8eb]'>
@@ -52,6 +52,8 @@ export default function ClassDashboard(){
                                         <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>No</th>
                                         <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>Name</th>
                                         <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>Description</th>
+                                        <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>Teacher</th>
+                                        <th className='border-b-2 border-r-2 p-2 border-[#A3BAC2]'>Student</th>
                                         <th className='border-b-2 p-2 border-[#A3BAC2] w-1'>Action</th>
                                     </tr>
                                 </thead>
@@ -61,6 +63,8 @@ export default function ClassDashboard(){
                                             <td className='border-e border-[#A3BAC2] border-b p-2 w-15 '>{index+1}</td>
                                             <td className='border-e border-[#A3BAC2] border-b p-2'>{classe.name}</td>
                                             <td className='border-e border-[#A3BAC2] border-b p-2'>{classe.description}</td>
+                                            <td className='border-e border-[#A3BAC2] border-b p-2'>{classe.teachers.length == 0 ? 'No teacher' : classe.teachers.length}</td>
+                                            <td className='border-e border-[#A3BAC2] border-b p-2'>{classe.students.length == 0 ? 'No student' : classe.students.length}</td>
                                             <td className='border-b p-2 px-6 border-[#A3BAC2]'>
                                                 <div className='flex justify-center items-center gap-3'>
                                                     <Link to={`/admin/dashboard/classes/${classe.id}/courses`} className='flex justify-center items-center w-10 h-8 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md'><Eye/></Link>

@@ -57,7 +57,7 @@ class WorkshopController extends Controller
      */
     public function show(string $id)
     {
-        $workshop = Workshop::with('courses.exam', 'students', 'teachers')->find($id);
+        $workshop = Workshop::with('courses.exam', 'courses.workshop.students', 'students', 'teachers')->find($id);
 
         if(!$workshop){
             return response()->json([

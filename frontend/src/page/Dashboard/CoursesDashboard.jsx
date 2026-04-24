@@ -47,7 +47,7 @@ export default function CoursesDashboard(){
                                 <Link to={`/admin/dashboard/classes/${classes.id}/courses/create`} className='flex justify-center items-center w-14 h-10 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md '><Plus className='size-7 stroke-2'/></Link>
                             </div>
                         </div>
-                        {loading ? <div>Loading...</div> : courses.length == 0 ? <div className='text-[#5a767f] font-semibold text-md bg-[#e0e8eb] mt-6 rounded-xl p-4 border border-[#b2cbd3]'>There is no courses</div> :
+                        {loading ? <div className="flex mt-15 justify-center items-center"> <div className="w-30 h-30 bg-white border-b-6 border-r-6 border-[#a3bac2] rounded-full animate-spin"></div> </div> : courses.length == 0 ? <div className='text-[#5a767f] font-semibold text-md bg-[#e0e8eb] mt-6 rounded-xl p-4 border border-[#b2cbd3]'>There is no courses</div> :
                         <div className='my-6 rounded-md border-collapse border-2 overflow-x-auto border-[#A3BAC2]'>
                             <table className='w-full text-[#3f454c]'>
                                 <thead className='bg-[#e0e8eb] text-[#5a767f]'>

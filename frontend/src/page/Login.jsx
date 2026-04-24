@@ -19,7 +19,7 @@ export default function Login(){
 
             try{
                 await login(form.email, form.password)
-                navigate('/dashboard')
+                navigate('/admin/dashboard')
             }catch(err){
                 if(err.response.status == 401){
                     setError(err.response.data.message || 'Failed to login')
