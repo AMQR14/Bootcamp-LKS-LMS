@@ -56,7 +56,7 @@ class CourseController extends Controller
      */
     public function show(string $id)
     {
-        $course = Course::with('exam')->find($id);
+        $course = Course::with('exam.question')->find($id);
 
         if(!$course){
             return response()->json([
