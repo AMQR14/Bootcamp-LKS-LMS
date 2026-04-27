@@ -34,6 +34,7 @@ export default function CreateExams(){
     async function fetchCourse() {
         const res = await api.get(`/workshops/${workshopid}`)
         setCourses(res.data.class.courses)
+        // console.log(res.data.class.courses)
     }
 
     useEffect(()=>{
@@ -115,6 +116,7 @@ export default function CreateExams(){
                                             {error.course_id && <p className='text-red-500'>{error.course_id[0]}</p>}
                                         </div>
                                     }
+                                    {}
                                     <button className='p-3 bg-[#60848f] text-white font-bold rounded-md hover:bg-[#7098a4] transition-all mt-10' type='submit' disabled={loading}>{loading ? 'Loading...' : 'Create'}</button>
                                 </div>
                             </form>

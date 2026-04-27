@@ -20,9 +20,9 @@ class Course extends Model
     return $this->belongsTo(Workshop::class);
     }
 
-    public function exam(): HasOne
+    public function exam(): HasMany
     {
-        return $this->hasOne(Exam::class, 'course_id');
+        return $this->hasMany(Exam::class, 'course_id');
     }
 
     public function courseFiles(): HasMany
