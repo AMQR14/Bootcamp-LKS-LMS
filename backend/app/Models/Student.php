@@ -35,4 +35,9 @@ class Student extends Model
     {
         return $this->hasMany(Answer::class, 'student_id');
     }
+
+    public function answer_mul(): HasMany
+    {
+        return $this->hasMany(AnswerMultipleChoice::class, 'student_id');
+    }
 }

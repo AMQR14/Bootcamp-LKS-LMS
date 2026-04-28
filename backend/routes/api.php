@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnswerController;
+use App\Http\Controllers\AnswerMulController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseFileController;
@@ -29,6 +30,7 @@ Route::prefix('v1')->group(function (){
     Route::apiResource('answers', AnswerController::class); 
     Route::apiResource('multiplechoices', MultipleChoiceController::class);    
     Route::apiResource('coursefiles', CourseFileController::class);
+    Route::apiResource('answer-mul', AnswerMulController::class);
     Route::get('/stats', [StatsController::class, 'index']);
     Route::get('/stats/students-by-year', [StatsController::class, 'studentsByYear']);
     

@@ -4,12 +4,14 @@ import { useParams } from "react-router-dom"
 import api from '../../lib/api'
 import { ArrowRight, BadgeQuestionMark, CircleQuestionMark, MoveLeft } from "lucide-react"
 import {Link} from 'react-router-dom'
+import { useAuth } from "../../contexts/AuthContext"
 
 export default function StudentCourse(){
     const [course, setCourse] = useState([])
     const [exam, setExam] = useState([])
     const [loading , setLoading] = useState(false)
     const {courseid} = useParams()
+    const {user} = useAuth()
 
     useEffect(()=>{
         async function fetchCourse() {

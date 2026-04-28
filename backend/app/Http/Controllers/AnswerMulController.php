@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Answer;
+use App\Models\AnswerMultipleChoice;
 use Illuminate\Http\Request;
 
-class AnswerController extends Controller
+class AnswerMulController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $answers = Answer::all();
-        
+        $answermul = AnswerMultipleChoice::all();
+
         return response()->json([
             'success'=> true,
             'message'=> 'Success',
-            'answers'=> $answers,
+            'answer'=> $answermul,
         ]);
     }
 
@@ -27,30 +27,28 @@ class AnswerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'answer'=> 'required', // {} itu pass
-            'answer.*'=> 'required', // {} itu error
             'question_id'=> 'required',
             'student_id'=> 'required',
-            // 'is_correct'=> 'required|boolean',
+            'multiple_choice_id'=> 'required'
         ]);
 
         try{
-            $answer = Answer::create([
-                'answer'=> $request->answer,
+            $answermul = AnswerMultipleChoice::create([
                 'question_id'=> $request->question_id,
                 'student_id'=> $request->student_id,
-                'is_correct'=> $request->is_correct,
+                'multiple_choice_id'=> $request->multiple_choice_id,
             ]);
+
             return response()->json([
                 'success'=> true,
-                'message'=> 'Answer created',
-                'answers'=> $answer,
+                'message'=> 'Answer mul created successfully ',
+                'answer'=> $answermul,
             ]);
         }catch(\Exception $e){
             return response()->json([
                 'success'=> false,
-                'message'=> 'Answer failed to be created',
-            ]);
+                'message'=> 'Answer mul failed to be created',
+            ], 500);
         }
     }
 
@@ -59,9 +57,9 @@ class AnswerController extends Controller
      */
     public function show(string $id)
     {
-        $answer = Answer::find($id);
+        $answermul = AnswerMultipleChoice::find($id);
 
-        if(!$answer){
+        if(!$answermul){
             return response()->json([
                 'success'=> false,
                 'message'=> 'Answer not found',
@@ -71,7 +69,7 @@ class AnswerController extends Controller
         return response()->json([
             'success'=> true,
             'message'=> 'Success',
-            'answer'=> $answer,
+            'answer'=> $answermul,
         ]);
     }
 
@@ -80,9 +78,9 @@ class AnswerController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $answer = Answer::find($id);
+        $answermul = AnswerMultipleChoice::find($id);
 
-        if(!$answer){
+        if(!$answermul){
             return response()->json([
                 'success'=> false,
                 'message'=> 'Answer not found',
@@ -90,29 +88,28 @@ class AnswerController extends Controller
         }
 
         $request->validate([
-            'answer'=> 'required',
             'question_id'=> 'required',
             'student_id'=> 'required',
-            'is_correct'=> 'required|boolean',
+            'multiple_choice_id'=> 'required'
         ]);
 
         try{
-            $answer->update([
-                'answer'=> $request->answer,
+            $answermul->update([
                 'question_id'=> $request->question_id,
                 'student_id'=> $request->student_id,
-                'is_correct'=> $request->is_correct,
+                'multiple_choice_id'=> $request->multiple_choice_id,
             ]);
+
             return response()->json([
                 'success'=> true,
-                'message'=> 'Answer updated',
-                'answers'=> $answer,
+                'message'=> 'Answer mul updated successfully ',
+                'answer'=> $answermul,
             ]);
         }catch(\Exception $e){
             return response()->json([
                 'success'=> false,
-                'message'=> 'Answer failed to be updated',
-            ]);
+                'message'=> 'Answer mul failed to be updated',
+            ], 500);
         }
     }
 
@@ -121,9 +118,9 @@ class AnswerController extends Controller
      */
     public function destroy(string $id)
     {
-        $answer = Answer::find($id);
+        $answermul = AnswerMultipleChoice::find($id);
 
-        if(!$answer){
+        if(!$answermul){
             return response()->json([
                 'success'=> false,
                 'message'=> 'Answer not found',
@@ -131,16 +128,17 @@ class AnswerController extends Controller
         }
 
         try{
-            $answer->delete();
+            $answermul->delete();
+
             return response()->json([
                 'success'=> true,
-                'message'=> 'Answer deleted',
+                'message'=> 'Answer mul deleted successfully',
             ]);
         }catch(\Exception $e){
             return response()->json([
                 'success'=> false,
-                'message'=> 'Answer failed to be deleted',
-            ]);
+                'message'=> 'Answer mul failed to be deleted',
+            ], 500);
         }
     }
 }

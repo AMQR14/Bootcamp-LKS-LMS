@@ -23,6 +23,11 @@ class Question extends Model
         return $this->hasMany(Answer::class , 'question_id');
     } 
 
+    public function answer_mul(): HasMany
+    {
+        return $this->hasMany(AnswerMultipleChoice::class, 'question_id');
+    }
+
     public function multipleChoice(): HasMany
     {
         return $this->hasMany(multipleChoice::class , 'question_id');

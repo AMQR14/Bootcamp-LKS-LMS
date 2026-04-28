@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class MultipleChoice extends Model
 {
@@ -16,5 +17,10 @@ class MultipleChoice extends Model
     public function question(): BelongsTo
     {
         return $this->belongsTo(Question::class);
+    }
+
+    public function answer_mul(): HasOne
+    {
+        return $this->hasOne(AnswerMultipleChoice::class, 'multiple_choice_id');
     }
 }

@@ -73,7 +73,7 @@ export default function StudentDashboard(){
                                                         </div>
                                                         <h2 className="text-[#3f454c] font-semibold py-2 truncate">{course.name.toUpperCase()}</h2>
                                                         <div className="hidden group-hover/card:block transition-all">
-                                                            <div className='text-[#5a767f] font-semibold text-md bg-[#e0e8eb] rounded-md m-auto p-2 border border-[#b2cbd3] truncate'>{course.exam == null ? 'There is no exam' : course.exam.length == 1 ? `Exam |  ${course.exam?.name}` : `Exam |  ${course.exam[0].name} + ${course.exam.length - 1} more` }</div>
+                                                            <div className='text-[#5a767f] font-semibold text-md bg-[#e0e8eb] rounded-md m-auto p-2 border border-[#b2cbd3] truncate'>{course.exam == null ? 'There is no exam' : course.exam.length == 1 ? `Exam |  ${course.exam[0].name}` : `Exam |  ${course.exam[0].name} + ${course.exam.length - 1} more` }</div>
                                                         </div>
                                                     </div> 
                                                 </div>
