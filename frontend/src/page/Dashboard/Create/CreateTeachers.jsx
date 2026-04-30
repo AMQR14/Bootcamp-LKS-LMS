@@ -15,15 +15,27 @@ export default function CreateTeachers(){
         workshop_id: '',
     })
     const [classes, setClasses] = useState([])
+    const [courses, setCourses] = useState([])
+    const [workshopId, setWorkshopId] = useState([])
     const [error, setError] = useState({})
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
+
+    async function getWorkId() {
+        setWorkshopId(form.workshop_id)
+        console.log(workshopId)
+    }
+
+    async function fetchClasses() {
+        const res =await api.get('/workshops')
+        setClasses(res.data.classes)
+    }
+
+    async function fetchCourse() {
+        const res = await api.get(`/courses/${workshopid}`)
+    }
     
     useEffect(()=>{
-        async function fetchClasses() {
-            const res =await api.get('/workshops')
-            setClasses(res.data.classes)
-        }
         fetchClasses()
     }, [])
 

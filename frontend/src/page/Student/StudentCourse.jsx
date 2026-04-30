@@ -13,6 +13,13 @@ export default function StudentCourse(){
     const {courseid} = useParams()
     const {user} = useAuth()
 
+    console.log(...user.user.student.answer.map(a => a.question.exam_id))
+
+    const completedExamId = [
+        ...user.user.student.answer.map(a => a.question.exam_id),
+        ...user.user.student.answer_mul.map(a => a.question.exam_id)
+    ]
+
     useEffect(()=>{
         async function fetchCourse() {
             setLoading(true)
@@ -20,7 +27,7 @@ export default function StudentCourse(){
                 const res = await api.get(`/courses/${courseid}`)
                 setCourse(res.data.course)
                 setExam(res.data.course.exam)
-                console.log(res.data.course.exam)
+                // console.log(res.data.course.exam)
             }finally{
                 setLoading(false)
             }
@@ -58,19 +65,19 @@ export default function StudentCourse(){
                                                         </div> 
                                                     </div>  
                                                     <div>
-                                                    <div className='text-[#5a767f] font-semibold text-xs bg-[#e0e8eb] rounded-md p-2 border border-[#b2cbd3] truncate w-fit'>Not Completed</div>
+                                                    <div className='text-[#5a767f] font-semibold text-xs bg-[#e0e8eb] rounded-md p-2 border border-[#b2cbd3] truncate w-fit'>{completedExamId.includes(exam.id) ? 'Completed' : 'Not Completed'}</div>
                                                     </div>
                                                 </div>
                                                 <h2 className="font-bold text-[#3f454c] sm:text-lg text-md ">{exam.name}</h2>
                                                 <Link to={`/student/dashboard/course/${courseid}/exam/${exam.id}`}>
-                                                    <div className="h-0 group-hover/card:h-10 group-hover/card:my-1 bg-[#9aa8b7] hover:bg-[#7e90a3] rounded-md flex justify-center items-center sm:hidden transition-all">
+                                                    <div className={`h-0 ${completedExamId.includes(exam.id) ? 'group-hover/card:h-0' : 'group-hover/card:h-10 group-hover/card:my-1'}  bg-[#9aa8b7] hover:bg-[#7e90a3] rounded-md flex justify-center items-center sm:hidden transition-all`}>
                                                         <ArrowRight className="size-0 group-hover/card:size-8 text-white"/>
                                                     </div>
                                                 </Link>
                                             </div>
                                             <div className="h-full transition-all hidden sm:block">
                                                 <Link to={`/student/dashboard/course/${courseid}/exam/${exam.id}`}>
-                                                    <div className="bg-[#9aa8b7] h-full group-hover/card:w-40 w-0 hover:bg-[#7e90a3] transition-all flex justify-center items-center">
+                                                    <div className={`bg-[#9aa8b7] h-full ${completedExamId.includes(exam.id) ? 'group-hover/card:w-0' : 'group-hover/card:w-40'} w-0 hover:bg-[#7e90a3] transition-all flex justify-center items-center`}>
                                                         <ArrowRight className="size-10 text-white"/>
                                                     </div>
                                                 </Link>

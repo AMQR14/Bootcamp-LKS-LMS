@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Exam;
 use App\Models\Student;
 use App\Models\User;
+use App\Models\Workshop;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -175,5 +177,31 @@ class StudentController extends Controller
                 'message'=> 'Student failed to be deleted',
             ], 500);
         }
+    }
+
+    public function examData(Request $request, string $id)
+    {
+        $exams = [];
+        //Cek answer dari siswa (kalau udah ada answer HARUSNY sudah selesai examnya well harusnya)
+        $examId = Student::with(['answer.question','answer_mul.question'])
+        ->whereHas('answer.question')
+        ->orWhereHas('answer_mul.question')
+        ->find($id);
+        foreach ($examId->answer as $key => $value) {
+            $exams[] = $value->question->exam_id ; // ambil exam idnya
+        }
+
+        foreach ($examId->answer_mul as $key => $value) {
+            $exams[] = $value->question->exam_id ; // ambil exam idnya
+        }
+        
+        $exams = Exam::whereIn('id', $exams)->get(); // ambil data exam
+
+        return response()->json([
+            'success'=> true,
+            'message'=> 'Success',
+            'answer'=> $exams,
+        ]);
+
     }
 }

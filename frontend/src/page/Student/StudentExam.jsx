@@ -16,8 +16,9 @@ export default function StudentExam(){
     const {courseid, examid} = useParams()
     const {user} = useAuth()
     const navigate = useNavigate()
-    // console.log(essays)
-    // console.log(muls)
+    console.log(essays)
+    console.log(muls)
+    // console.log(question.length)
     
     useEffect(()=>{
         async function fetchQuestion() {
@@ -37,42 +38,48 @@ export default function StudentExam(){
         e.preventDefault()
         setLoading(true)
         setError({})
-        // if ((Object.values(essays).length == 0) && (Object.values(muls).length == 0)) {
-        //     setError({});
-        //     setLoading(false);
-        //     return;
-        // }
+
         try{
-            // api.post('/sendall', {
-            //     essays,
-            //     question.id,
-            //     student_id
-            // });
 
-            await Promise.all(
-                Object.entries(essays).map(([question_id, answer]) =>
-                    api.post(`/answers`, {
+            // await Promise.all(
+            //     Object.entries(essays).map(([question_id, answer]) =>
+            //         api.post(`/answers`, {
+            //             answer,
+            //             question_id,
+            //             student_id: user.user.student.id,
+            //         })
+            //     )
+            // )
+
+            // await Promise.all(
+            //     Object.entries(muls).map(([question_id, multiple_choice_id]) =>
+            //         api.post(`/answer-mul`, {
+            //             multiple_choice_id,
+            //             question_id,
+            //             student_id: user.user.student.id,
+            //         })
+            //     )
+
+            if(Object.entries(muls).length + Object.entries(essays).length != question.length){
+                setError(['Complete All The Questions'])
+                console.log(error)
+                return;
+            }else{
+                await api.post('/answer/bulk', {
+                    student_id: user.user.student.id,
+                    essays: Object.entries(essays).map(([question_id, answer])=>({
+                        question_id,
                         answer,
+                    })),
+                    muls: Object.entries(muls).map(([question_id, multiple_choice_id])=>({
                         question_id,
-                        student_id: user.user.student.id,
-                    })
-                )
-            )
-
-            await Promise.all(
-                Object.entries(muls).map(([question_id, multiple_choice_id]) =>
-                    api.post(`/answer-mul`, {
                         multiple_choice_id,
-                        question_id,
-                        student_id: user.user.student.id,
-                    })
-                )
-            )
-            navigate(`/student/dashboard/course/${courseid}`)
-        }catch(err){
-            if(err.response.status == 422){
-                setError(err.response.data.errors)
+                    })) 
+                })
+    
+                navigate(`/student/dashboard/course/${courseid}`)
             }
+
         }finally{
             setLoading(false)
         }
@@ -98,6 +105,7 @@ export default function StudentExam(){
                                 </div>
                             </div>
                             <div className="my-4 min-h-screen gap-4 flex flex-col">
+                                {error && <p className="text-red-500">{error[0]}</p>}
                                 {question.map((question, index)=>(
                                     <div className="border border-gray-300 bg-gray-100 rounded-md h-full" key={question.id}>
                                         <div className="flex gap-2 w-full h-full p-3 text-[#3f454c]">
@@ -111,13 +119,12 @@ export default function StudentExam(){
                                                     <textarea 
                                                         type="text" 
                                                         placeholder="Enter Answer..." 
-                                                        className="border border-gray-300 rounded-md bg-gray-50 w-full p-2" 
+                                                        className="border border-gray-300 rounded-md bg-gray-50 w-full p-2 hover:border-gray-400 transition-all focus:outline-none focus:border-gray-400" 
                                                         onChange={e => setEssays(prev => ({
                                                             ...prev,
                                                             [question.id]: e.target.value
                                                         }))}
                                                     />
-                                                    {error.answer && <p className="text-red-500">{error.answer[0]}</p>}
                                                 </div>
                                                 :
                                                 <div>
@@ -125,7 +132,7 @@ export default function StudentExam(){
                                                     <div className="gap-2 flex flex-col">
                                                         {question.multiple_choice.map((choice)=>(
                                                             <label key={choice.id}>
-                                                                <div className="gap-2 flex bg-gray-50 rounded-md border border-gray-300 p-2 px-2">
+                                                                <div className="gap-2 flex bg-gray-50 rounded-md border border-gray-300 p-2 px-2 hover:border-gray-400 transition-all has-checked:border-[#60848f] has-checked:border-2">
                                                                     <input 
                                                                         type="radio" 
                                                                         name={question.id}
@@ -134,6 +141,7 @@ export default function StudentExam(){
                                                                             ...prev,
                                                                             [question.id]: choice.id
                                                                         }))}
+                                                                        className=""
                                                                     />
                                                                     <label htmlFor="">{choice.choice_text}</label>
                                                                 </div>

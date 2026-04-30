@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Answer;
+use App\Models\AnswerMultipleChoice;
 use Illuminate\Http\Request;
 
 class AnswerController extends Controller
@@ -50,6 +51,47 @@ class AnswerController extends Controller
             return response()->json([
                 'success'=> false,
                 'message'=> 'Answer failed to be created',
+            ]);
+        }
+    }
+
+    public function bulkStore(Request $request)
+    {
+        $request->validate([
+            'student_id'=> 'required',
+            'essays'=> 'array',
+            'essays.*.question_id'=> 'required',
+            'essays.*.answer'=> 'required',
+            'muls'=> 'array',
+            'muls.*.question_id'=> 'required',
+            'muls.*.multiple_choice_id'=> 'required',
+        ]);
+
+        try{
+            foreach ($request->essays as $essay) {
+                Answer::create([
+                    'question_id'=> $essay['question_id'],
+                    'answer'=> $essay['answer'],
+                    'student_id'=> $request->student_id,
+                ]);
+            }
+
+            foreach ($request->muls as $muls) {
+                AnswerMultipleChoice::create([
+                    'question_id'=> $muls['question_id'],
+                    'multiple_choice_id'=> $muls['multiple_choice_id'],
+                    'student_id'=> $request->student_id
+                ]);
+            }
+
+            return response()->json([
+                'success'=> true,
+                'Message'=> 'Answer successfully stored',
+            ]);
+        }catch(\Exception $e){
+            return response()->json([
+                'success'=> false,
+                'Message'=> 'Failed to store answer',
             ]);
         }
     }

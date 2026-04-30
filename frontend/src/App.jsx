@@ -33,6 +33,7 @@ import TeacherDashboard from "./page/Teacher/TeacherDashboard"
 import StudentProfile from "./page/Student/StudentProfile"
 import StudentCourse from "./page/Student/StudentCourse"
 import StudentExam from "./page/Student/StudentExam"
+import TeacherProfile from "./page/Teacher/TeacherProfile"
 
 
 import { AuthProvider, useAuth } from "./contexts/AuthContext"
@@ -112,6 +113,7 @@ function AppRoutes(){
 
       <Route element={<TeacherRoute/>}>
         <Route path="/teacher/dashboard" element={<TeacherDashboard/>}/>
+        <Route path="/teacher/dashboard/:id/profile" element={<TeacherProfile/>}/>
       </Route>
       
       <Route element={<AdminRoute/>}>

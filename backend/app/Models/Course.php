@@ -30,4 +30,8 @@ class Course extends Model
         return $this->hasMany(CourseFile::class, 'course_id');
     }
  
+    public function teacher_course(): HasMany
+    {
+        return $this->hasMany(TeacherCourse::class, 'course_id');
+    }
 }
