@@ -14,6 +14,10 @@ export default function CreateTeachers(){
         date_of_birth: '',
         workshop_id: '',
     })
+    const [teacherCourse, setTeacherCourse] = useState({
+        teacher_id: '',
+        course_id: '',
+    })
     const [classes, setClasses] = useState([])
     const [courses, setCourses] = useState([])
     const [workshopId, setWorkshopId] = useState([])
@@ -33,6 +37,7 @@ export default function CreateTeachers(){
 
     async function fetchCourse() {
         const res = await api.get(`/courses/${workshopid}`)
+        console.log(res.data)
     }
     
     useEffect(()=>{
@@ -53,7 +58,12 @@ export default function CreateTeachers(){
                 date_of_birth: form.date_of_birth,
                 workshop_id: form.workshop_id,
             });
-            console.log(form)
+            
+            await api.post('/teacher-courses', {
+                teacher_id: teacherCourse.teacher_id,
+                course_id: teacherCourse.course_id,
+            })
+
             navigate('/admin/dashboard/teachers')
         }catch(err){
             if(err.response.status = 422){
