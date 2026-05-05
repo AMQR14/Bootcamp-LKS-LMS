@@ -36,7 +36,7 @@ class AuthController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Success',
-            'user' => $user->load('student.workshop.courses', 'teacher', 'student.answer.question.exam', 'student.answer_mul.question.exam'),
+            'user' => $user->load('student.workshop.courses', 'teacher.teacher_course.course.exam', 'student.answer.question.exam', 'student.answer_mul.question.exam', 'teacher.teacher_course.course.workshop.students'),
         ]);
     }
 

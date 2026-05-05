@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Teacher;
+use App\Models\TeacherCourse;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -37,6 +38,7 @@ class TeacherController extends Controller
             'email' => 'required|email|unique:users' ,
             'date_of_birth' => 'required|date',
             'workshop_id' => 'required',
+            'course_id' => 'array | required',
         ]);
 
         try{
@@ -48,8 +50,10 @@ class TeacherController extends Controller
                 'email' => $request->email,
                 'date_of_birth' => $request->date_of_birth,
                 'workshop_id' => $request->workshop_id,
+                'course_id' => $request->course_id,
                 'joined_at'=> now()
             ]);
+            
 
             $user = User::create([
                 'email' => $request->email,
@@ -60,6 +64,13 @@ class TeacherController extends Controller
             $teacher->update([
                 'user_id' => $user->id 
             ]);
+            
+            foreach ($request->course_id as $course) {
+                $teachercourse = TeacherCourse::create([
+                    'teacher_id'=> $teacher->id,
+                    'course_id'=> $course
+                ]);
+            }
 
             return response()->json([
                 'success'=> true,
@@ -79,7 +90,7 @@ class TeacherController extends Controller
      */
     public function show(string $id)
     {
-        $teacher = Teacher::with('workshop')->find($id);
+        $teacher = Teacher::with('workshop', 'teacher_course')->find($id);
 
         if(!$teacher){
             return response()->json([

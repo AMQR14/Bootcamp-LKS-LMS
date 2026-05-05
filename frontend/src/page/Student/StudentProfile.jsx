@@ -16,27 +16,29 @@ export default function StudentProfile(){
         // password: '',
         role: 'student',
     })
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
     const [error, setError] = useState({})
-    const {id} = useParams()
     const [userid, setUserid] = useState('')
+    const [id, setId] = useState('')
     const navigate = useNavigate()
+    const {user} = useAuth()
 
     useEffect(()=>{
         async function fetchUser() {
-            setLoading(true)
+            setId(user.user.id)
+            // console.log(user.user.id)
             try{
                 const res = await api.get(`/users/${id}`)
                 setUserid(res.data.user.student.id)
                 setForm(res.data.user.student)
-                console.log(res.data.user.student)    
+                // console.log(res.data.user.student)    
             }finally{
                 setLoading(false)
             }
         }
         fetchUser()
-    }, [userid])
+    }, [userid, id])
 
 
     async function handleSubmit(e) {

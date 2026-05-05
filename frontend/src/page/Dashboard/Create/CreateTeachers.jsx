@@ -13,20 +13,19 @@ export default function CreateTeachers(){
         nidn: '',
         date_of_birth: '',
         workshop_id: '',
-    })
-    const [teacherCourse, setTeacherCourse] = useState({
-        teacher_id: '',
-        course_id: '',
+        course_id: [],
     })
     const [classes, setClasses] = useState([])
     const [courses, setCourses] = useState([])
     const [workshopId, setWorkshopId] = useState([])
     const [error, setError] = useState({})
     const [loading, setLoading] = useState(false)
+    const [search, setSearch] = useState('')
+    const [selected, setSelected] = useState([])
     const navigate = useNavigate()
 
-    async function getWorkId() {
-        setWorkshopId(form.workshop_id)
+    async function getWorkId(e) {
+        setWorkshopId(e.target.value)
         console.log(workshopId)
     }
 
@@ -36,13 +35,47 @@ export default function CreateTeachers(){
     }
 
     async function fetchCourse() {
-        const res = await api.get(`/courses/${workshopid}`)
-        console.log(res.data)
+        const res = await api.get(`/workshops/${workshopId}`)
+        setCourses(res.data.class.courses)
+        console.log(res.data.class.courses)
     }
+
+    useEffect(()=>{
+        if(workshopId){
+            fetchCourse()
+        }
+    }, [workshopId])
     
     useEffect(()=>{
         fetchClasses()
     }, [])
+
+    const handleSearch = (e) => {
+        setSearch(e.target.value)
+        console.log(e.target.value)
+    }
+
+    const filter = courses.filter((course)=>
+        course.name.toLowerCase().includes(search.toLowerCase())
+    )
+
+    const addCourseId = (id) =>{
+        setForm(prev => ({
+            ...prev, course_id: [...prev.course_id, id]
+        }))
+    }
+
+    const select = (id) =>{
+        setSelected(prev => prev.includes(id) ? prev.filter((i)=> i !== id) : [...prev, id])
+    }
+
+    const selectedCourse = courses.filter((course)=>
+        selected.includes(course.id)
+    )
+    
+    console.log(selectedCourse)
+
+    console.log(selected)
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -56,13 +89,9 @@ export default function CreateTeachers(){
                 nik: form.nik,
                 nidn: form.nidn,
                 date_of_birth: form.date_of_birth,
-                workshop_id: form.workshop_id,
+                workshop_id: workshopId,
+                course_id: selected,
             });
-            
-            await api.post('/teacher-courses', {
-                teacher_id: teacherCourse.teacher_id,
-                course_id: teacherCourse.course_id,
-            })
 
             navigate('/admin/dashboard/teachers')
         }catch(err){
@@ -72,6 +101,8 @@ export default function CreateTeachers(){
         }finally{
             setLoading(false)
         }
+
+        
     }
 
     return (
@@ -115,7 +146,7 @@ export default function CreateTeachers(){
                                     </div>
                                     <div className='flex flex-col gap-2'>
                                         <label htmlFor="" className='font-bold'>Class:</label>
-                                        <select name="" id="" className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]' onChange={e => setForm({...form, workshop_id: e.target.value})}>
+                                        <select name="" id="" className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]' value={workshopId} onChange={getWorkId}>
                                                 <option value="" disabled selected>Select Class</option>
                                             {classes.map((classe)=>(
                                                 <option key={classe.id} value={classe.id}>{classe.name}</option>
@@ -123,6 +154,28 @@ export default function CreateTeachers(){
                                         </select>
                                         {error.workshop_id && <p className='text-red-500'>{error.workshop_id[0]}</p>}
                                     </div>
+                                    {workshopId == '' ? '' :
+                                        <div className='flex flex-col gap-2'>
+                                            <label htmlFor="" className='font-bold'>Course:</label>
+                                            <div className='flex p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f] gap-1 flex-wrap'>
+                                                {selectedCourse.map((course)=>(
+                                                    <div key={course.id} className='flex-wrap flex gap-2'>
+                                                        <div value={course.id} className={`rounded-md ${selected.includes(course.id) ? 'text-[#5a767f] bg-[#e0e8eb] border-[#b2cbd3]' : 'bg-gray-100 hover:bg-gray-200 border-gray-300'}  border  p-1 px-2 text-nowrap cursor-pointer  transition-all `} onClick={()=> select(course.id)}>{course.name}</div>
+                                                    </div>
+                                                ))}
+                                                
+                                                <input name="" id="" className='w-full  rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]' value={search} onChange={handleSearch} placeholder='Search...'>
+                                                </input>
+                                            </div>
+                                            <div className='flex-wrap flex gap-3'>
+                                                {filter.slice(0,10).map((course)=>(
+                                                    <div key={course.id} value={course.id} className={`rounded-md ${selected.includes(course.id) ? 'text-[#5a767f] bg-[#e0e8eb] border-[#b2cbd3]' : 'bg-gray-100 hover:bg-gray-200 border-gray-300'}  border  p-1 px-2 text-nowrap cursor-pointer  transition-all`} onClick={()=> select(course.id)}>{course.name}</div>
+                                                ))}
+                                                {console.log(form)}
+                                            </div>
+                                            {error.course_id && <p className='text-red-500'>{error.course_id[0]}</p>}
+                                        </div>
+                                    }
                                     <button className='p-3 bg-[#60848f] text-white font-bold rounded-md hover:bg-[#7098a4] transition-all mt-10' type='submit' disabled={loading}>{loading ? 'Creating...': 'Create'}</button>
                                 </div>
                             </form>

@@ -76,10 +76,8 @@ export default function StudentExam(){
                         multiple_choice_id,
                     })) 
                 })
-    
-                navigate(`/student/dashboard/course/${courseid}`)
             }
-
+            navigate(`/student/dashboard/course/${courseid}`)
         }finally{
             setLoading(false)
         }

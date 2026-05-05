@@ -27,15 +27,16 @@ class TeacherCoursesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'teacher_id'=> 'required',
+            // 'teacher_id'=> 'required',
             'course_id'=> 'required',
         ]);
 
         try{
             $teachercourse = TeacherCourse::create([
-                'teacher_id'=> $request->teacher_id,
+                // 'teacher_id'=> $request->teacher_id,
                 'course_id'=> $request->course_id,
             ]);
+
             return response()->json([
                 'success'=> true,
                 'message'=> 'Teacher course created',
@@ -85,13 +86,13 @@ class TeacherCoursesController extends Controller
         }
 
         $request->validate([
-            'teacher_id'=> 'required',
+            // 'teacher_id'=> 'required',
             'course_id'=> 'required',
         ]);
 
         try{
             $teachercourse->update([
-                'teacher_id'=> $request->teacher_id,
+                // 'teacher_id'=> $request->teacher_id,
                 'course_id'=> $request->course_id,
             ]);
             return response()->json([

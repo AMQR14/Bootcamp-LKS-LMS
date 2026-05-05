@@ -94,8 +94,8 @@ export default function TeacherDashboardLayout({children}){
                                 </div>
                             </div>
                         </Link>
-                        <Link to={`/teacher/dashboard/${user?.id}/profile`}>
-                            <div className={`hover:bg-[#E0E8EB] hover:border-l-8 hover:font-bold h-full w-full transition-all text-[#3f454c] font-semibold py-2 ${location.pathname === `/teacher/dashboard/${user?.id}/profile` ? 'border-l-8 ' : 'none'}`}>
+                        <Link to={'/teacher/dashboard/profile'}>
+                            <div className={`hover:bg-[#E0E8EB] hover:border-l-8 hover:font-bold h-full w-full transition-all text-[#3f454c] font-semibold py-2 ${location.pathname === '/teacher/dashboard/profile' ? 'border-l-8 ' : 'none'}`}>
                                 <div className="flex ml-8 items-center gap-1">
                                     <User color="#3f454c" size={18}/>Profile
                                 </div>

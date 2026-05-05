@@ -1,6 +1,8 @@
+'use client'
+
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../contexts/AuthContext'
-import StudentDashboardLayout from '../../layouts/StudentDashboardLayout'
+import TeacherDashboardLayout from '../../layouts/TeacherDashboardLayout'
 import { useNavigate, useParams } from 'react-router-dom'
 import api from '../../lib/api'
 
@@ -16,27 +18,29 @@ export default function TeacherProfile(){
         // password: '',
         role: 'student',
     })
-    const [loading, setLoading] = useState(false)
+
+    const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
     const [error, setError] = useState({})
-    const {id} = useParams()
     const [userid, setUserid] = useState('')
+    const [id, setId] = useState('')
     const navigate = useNavigate()
+    const {user} = useAuth()
 
     useEffect(()=>{
         async function fetchUser() {
-            setLoading(true)
+            setId(user.user.id)
             try{
                 const res = await api.get(`/users/${id}`)
-                setUserid(res.data.user.teacher.id)
+                setUserid(res.data.user?.teacher.id)
                 setForm(res.data.user.teacher)
-                console.log(res.data.user.teacher)    
+                // console.log(res.data.user.teacher)    
             }finally{
                 setLoading(false)
             }
         }
         fetchUser()
-    }, [userid])
+    }, [userid, id])
 
 
     async function handleSubmit(e) {
@@ -67,7 +71,7 @@ export default function TeacherProfile(){
     }
 
     return (
-        <StudentDashboardLayout>
+        <TeacherDashboardLayout>
             <main className="flex">
                     <div className="m-8 md:mx-20 w-full">
                         <h1 className='font-bold text-2xl text-[#3f454c]'>Profile</h1>
@@ -122,6 +126,6 @@ export default function TeacherProfile(){
                         </div>
                     </div>
                 </main>
-        </StudentDashboardLayout>
+        </TeacherDashboardLayout>
     )
 }

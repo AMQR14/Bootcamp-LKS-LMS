@@ -93,7 +93,7 @@ export default function StudentDashboardLayout({children}){
                                 </div>
                             </div>
                         </Link>
-                        <Link to={`/student/dashboard/${user?.id}/profile`}>
+                        <Link to={`/student/dashboard/profile`}>
                             <div className={`hover:bg-[#E0E8EB] hover:border-l-8 hover:font-bold h-full w-full transition-all text-[#3f454c] font-semibold py-2 ${location.pathname == '/student/dashboard/profile' ? 'border-l-8 ' : 'none'}`}>
                                 <div className="flex ml-8 items-center gap-1">
                                     <User color="#3f454c" size={18}/>Profile
