@@ -80,7 +80,7 @@ class StudentController extends Controller
      */
     public function show(string $id)
     {
-        $student = Student::with('workshop')->find($id);
+        $student = Student::with('workshop', 'answer.question' , 'answer_mul.question')->find($id);
 
         if(!$student){
             return response()->json([

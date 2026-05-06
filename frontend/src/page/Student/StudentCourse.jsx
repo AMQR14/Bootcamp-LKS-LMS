@@ -11,30 +11,57 @@ export default function StudentCourse(){
     const [exam, setExam] = useState([])
     const [loading , setLoading] = useState(false)
     const {courseid} = useParams()
+    const [completedExamId, setCompletedExamId] = useState([])
     const {user} = useAuth()
 
-    console.log(...user.user.student.answer.map(a => a.question.exam_id))
+    async function fetchCompletedExam() {
+        setLoading(true)
+        const studentid = user.user.student.id
+        try{
+            const res = await api.get(`/students/${studentid}`)
 
-    const completedExamId = [
-        ...user.user.student.answer.map(a => a.question.exam_id),
-        ...user.user.student.answer_mul.map(a => a.question.exam_id)
-    ];
+            // const answer = res.data.student.answer.map(a => a.question.exam_id)
+            // const answermul = res.data.student.answer_mul.map(a => a.question.exam_id)
+
+            // setCompletedExamId([
+            //     ...answer,
+            //     ...answermul,
+            // ])
+
+            setCompletedExamId([
+                ...res.data.student.answer.map(a => a.question.exam_id), 
+                ...res.data.student.answer_mul.map(a => a.question.exam_id)
+            ])
+
+            // setCompletedExamId(prev => [...prev, ...res.data.student.answer_mul.map(a => a.question.exam_id)])
+        }finally{
+            setLoading(false)
+        }
+    }
+
+    async function fetchCourse() {
+        setLoading(true)
+        try{
+            const res = await api.get(`/courses/${courseid}`)
+            setCourse(res.data.course)
+            setExam(res.data.course.exam)
+            // console.log(res.data.course.exam)
+        }finally{
+            setLoading(false)
+        }
+    }
 
     useEffect(()=>{
-        async function fetchCourse() {
-            setLoading(true)
-            try{
-                const res = await api.get(`/courses/${courseid}`)
-                setCourse(res.data.course)
-                setExam(res.data.course.exam)
-                // console.log(res.data.course.exam)
-            }finally{
-                setLoading(false)
-            }
-        }
         fetchCourse()
     }, [])
 
+    useEffect(()=>{
+        // if(completedExamId){
+        //     console.log(completedExamId)
+        // }
+        
+        fetchCompletedExam()
+    }, [])
     return (
         <StudentDashboardLayout>
             <main className="flex ">

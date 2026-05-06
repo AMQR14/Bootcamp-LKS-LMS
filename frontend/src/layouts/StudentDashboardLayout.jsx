@@ -74,7 +74,7 @@ export default function StudentDashboardLayout({children}){
                                 <div className="text-sm text-[#707984]">{loading ? 'loading...' : user.role[0]?.toUpperCase() + user.role.slice(1)}</div>
                             </div>
                             <div className="m-3 text-[#A3BAC2]">
-                                <Link to={`/student/dashboard/${user?.id}/profile`}>
+                                <Link to={`/student/dashboard/profile`}>
                                     <button className="mb-2 py-1.25 px-3 text-white bg-[#60848f] hover:bg-[#739daa] transition-all font-semibold rounded-md flex justify-center w-full">Profile</button>
                                 </Link>
                                 <hr className="border-[1.2px]"/>
