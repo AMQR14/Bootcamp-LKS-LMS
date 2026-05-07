@@ -93,7 +93,7 @@ export default function StudentDashboard(){
                                                         </div>
                                                         <div>
                                                             <h2 className="text-[#3f454c] font-semibold pt-2 truncate">{course.name.toUpperCase()}</h2>
-                                                            <h2 className="text-sm text-[#84909e]">{course.teacher_course[0]?.teacher.name}</h2>
+                                                            <h2 className="text-sm text-[#84909e]">{course.teacher_course?.teacher.name}</h2>
                                                         </div>
                                                         <div className="hidden group-hover/card:block transition-all pt-2">
                                                             <div className='text-[#5a767f] font-semibold text-md bg-[#e0e8eb] rounded-md m-auto p-2 border border-[#b2cbd3] truncate'>

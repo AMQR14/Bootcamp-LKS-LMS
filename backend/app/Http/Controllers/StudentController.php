@@ -187,15 +187,17 @@ class StudentController extends Controller
         ->whereHas('answer.question')
         ->orWhereHas('answer_mul.question')
         ->find($id);
-        
-        foreach ($examId->answer as $key => $value) {
-            $exams[] = $value->question->exam_id ; // ambil exam idnya
+
+        if($examId != null){
+            foreach ($examId->answer as $key => $value) {
+                $exams[] = $value->question->exam_id ; // ambil exam idnya
+            }
+
+            foreach ($examId->answer_mul as $key => $value) {
+                $exams[] = $value->question->exam_id ; // ambil exam idnya
+            }
         }
 
-        foreach ($examId->answer_mul as $key => $value) {
-            $exams[] = $value->question->exam_id ; // ambil exam idnya
-        }
-        
         $exams = Exam::whereIn('id', $exams)->get(); // ambil data exam
 
         return response()->json([
