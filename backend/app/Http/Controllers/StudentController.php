@@ -187,6 +187,7 @@ class StudentController extends Controller
         ->whereHas('answer.question')
         ->orWhereHas('answer_mul.question')
         ->find($id);
+        
         foreach ($examId->answer as $key => $value) {
             $exams[] = $value->question->exam_id ; // ambil exam idnya
         }

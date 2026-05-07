@@ -198,7 +198,16 @@ export default function TeacherCourse(){
                                         <Link to={'/teacher/dashboard'} className='flex justify-center items-center w-14 h-10 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md '><MoveLeft className='size-7 stroke-2'/></Link>
                                     </div>
                                 </div>
-                                {exams.length == 0 ? <div className='text-[#5a767f] font-semibold text-md bg-[#e0e8eb] mt-6 rounded-xl p-4 border border-[#b2cbd3]'>There is no exams</div> :
+                                {exams.length == 0 ?
+                                
+                                <div className="gap-6 flex flex-col">
+                                    <div className='text-[#5a767f] font-semibold text-md bg-[#e0e8eb] mt-6 rounded-xl p-4 border border-[#b2cbd3]'>There is no exams</div> 
+                                    <div className="group/create hover:scale-101 border-4 border-dashed border-gray-200 hover:border-gray-300 h-25 rounded-xl flex justify-center items-center transition-all" onClick={()=> open()}>
+                                            <Plus className="size-24 text-gray-200 group-hover/create:text-gray-300 transition-all stroke-2"/>
+                                    </div>
+                                </div>
+                                
+                                :
                                     <div className="min-h-screen gap-6 my-5 flex flex-col">
                                         {exams.map((exam)=>(
                                             <div key={exam.id}>
@@ -215,10 +224,24 @@ export default function TeacherCourse(){
                                                                 </div> 
                                                             </div>  
                                                             <div className="flex items-center gap-2">
-                                                                <div className="text-[#84909e] text-sm text-nowrap flex items-center">Complete:  <User className="text-[#84909e] size-4 ml-1"/> 20</div>
+                                                                {/* <div className="text-[#84909e] text-sm text-nowrap flex items-center">Finished:  <User className="text-[#84909e] size-4 ml-1"/> 20</div> */}
+                                                                <div className="flex gap-1 text-sm bg-green-200 p-1 px-2 rounded-md w-fit items-center justify-center text-green-600 border border-green-600">
+                                                                    <h1 className="">Finished</h1>
+                                                                    <div className="flex h-full w-2 items-center justify-center">
+                                                                        <div className="w-[0.8px] h-4 bg-green-400"></div>
+                                                                    </div>
+                                                                    <p className="flex items-center">200 <User className="size-5"/></p>
+                                                                </div>
+                                                                <div className="flex gap-1 text-sm bg-red-200 p-1 px-2 rounded-md w-fit items-center justify-center text-red-600 border border-red-600">
+                                                                    <h1 className="text-nowrap">Not Finished</h1>
+                                                                    <div className="flex h-full w-2 items-center justify-center">
+                                                                        <div className="w-[0.8px] h-4 bg-red-400"></div>
+                                                                    </div>
+                                                                    <p className="flex items-center">200 <User className="size-5"/></p>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                        <div className="flex justify-between my-auto">
+                                                        <div className="flex justify-between my-auto mt-2">
                                                             <h2 className="font-bold text-[#3f454c] sm:text-lg text-md my-auto">{exam.name}</h2>
                                                             <div className="flex opacity-0 flex-row justify-center items-center gap-2 text-white group-hover/card:opacity-100 transition-all">
                                                                     <button className="bg-[#5ca3b8] hover:bg-[#66b2c9] p-1 rounded-md" onClick={()=> edit(exam.id)}>

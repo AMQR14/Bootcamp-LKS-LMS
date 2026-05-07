@@ -107,7 +107,7 @@ export default function StudentExam(){
                                 {question.map((question, index)=>(
                                     <div className="border border-gray-300 bg-gray-100 rounded-md h-full" key={question.id}>
                                         <div className="flex gap-2 w-full h-full p-3 text-[#3f454c]">
-                                            <h1 className="bg-gray-200 w-8 h-8 flex items-center justify-center rounded-md font-semibold text-[#3f454c]">{index + 1}</h1>
+                                            <h1 className="bg-gray-50 border border-gray-300 w-8 h-8 flex items-center justify-center rounded-md font-semibold text-[#3f454c]">{index + 1}</h1>
                                             <div className="w-full gap-2 flex flex-col">
                                                 <div className="border border-gray-300 rounded-md bg-gray-50">
                                                     <p className="p-2 ">{question.question}</p>

@@ -30,8 +30,8 @@ class Course extends Model
         return $this->hasMany(CourseFile::class, 'course_id');
     }
  
-    public function teacher_course(): HasMany
+    public function teacher_course(): HasOne
     {
-        return $this->hasMany(TeacherCourse::class, 'course_id');
+        return $this->hasOne(TeacherCourse::class, 'course_id');
     }
 }

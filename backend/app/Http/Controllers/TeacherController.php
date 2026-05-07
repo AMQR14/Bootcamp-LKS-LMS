@@ -38,7 +38,7 @@ class TeacherController extends Controller
             'email' => 'required|email|unique:users' ,
             'date_of_birth' => 'required|date',
             'workshop_id' => 'required',
-            'course_id' => 'array | required',
+            'course_id' => 'array | required | unique:teacher_courses',
         ]);
 
         try{

@@ -340,12 +340,13 @@ export default function TeacherExamQuestion(){
                             <div className="flex mt-15 justify-center items-center"> <div className="w-30 h-30 bg-white border-b-6 border-r-6 border-[#a3bac2] rounded-full animate-spin"></div> </div>
                         :
                             <div>
-                                <h1 className='font-bold text-2xl text-[#3f454c]'>{examName}</h1>
-                                <div className="flex w-full gap-4 mt-2">
-                                    <div className="border border-gray-300 w-full bg-gray-100 rounded-md"></div>
+                                <div className="flex w-full gap-4">
+                                    <div className="border border-gray-300 w-full bg-gray-100 rounded-md flex items-center">
+                                        <h1 className="ml-4 font-semibold text-[#3f454c]">{examName}</h1>
+                                    </div>
                                     
                                     <div className='flex justify-end gap-2'>
-                                        <Link to={`/teacher/dashboard/course/${courseid}/exam/${examid}`} className='flex justify-center items-center w-14 h-10 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md '><MoveLeft className='size-7 stroke-2'/></Link>
+                                        <Link to={`/teacher/dashboard/course/${courseid}/exam/${examid}`} className='flex justify-center items-center w-14 h-12 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md '><MoveLeft className='size-7 stroke-2'/></Link>
                                     </div>
                                     {/* <div className='flex justify-end gap-2'>
                                         <button className='flex justify-center items-center w-24 h-10 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md ' type="submit" disabled={loading}>{loading? 'Loading...' : 'Save'}</button>
@@ -356,7 +357,7 @@ export default function TeacherExamQuestion(){
                                         <div className="group/question  border border-gray-300 bg-gray-100 rounded-md h-full" key={question.id}>
                                             <div className="flex gap-2 w-full h-full p-3 text-[#3f454c]">
                                                 <div className="flex items-center justify-between flex-col gap-2">
-                                                    <h1 className="bg-gray-200 w-8 h-8 flex items-center justify-center rounded-md font-semibold text-[#3f454c]">{index + 1}</h1>
+                                                    <h1 className="bg-gray-50 border border-gray-300 w-8 h-8 flex items-center justify-center rounded-md font-semibold text-[#3f454c]">{index + 1}</h1>
                                                     <div className="flex opacity-0 flex-col justify-center items-center gap-2 text-white group-hover/question:opacity-100 transition-all">
                                                         <button className="bg-[#5ca3b8] hover:bg-[#66b2c9] p-1 rounded-md" onClick={()=> edit(question.id)}>
                                                             <Edit className="text-"/>

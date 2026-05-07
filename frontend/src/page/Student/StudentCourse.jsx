@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import StudentDashboardLayout from "../../layouts/StudentDashboardLayout"
 import { useParams } from "react-router-dom"
 import api from '../../lib/api'
-import { ArrowRight, BadgeQuestionMark, CircleQuestionMark, MoveLeft } from "lucide-react"
+import { ArrowRight, BadgeQuestionMark, CircleQuestionMark, MoveLeft, User } from "lucide-react"
 import {Link} from 'react-router-dom'
 import { useAuth } from "../../contexts/AuthContext"
 
@@ -92,9 +92,17 @@ export default function StudentCourse(){
                                                                 <p className="sm:text-sm text-[#84909e] text-xs text-nowrap">{exam.start_time} - {exam.end_time} </p>
                                                             </div> 
                                                         </div>  
-                                                        <div>
-                                                        <div className='text-[#5a767f] font-semibold text-xs bg-[#e0e8eb] rounded-md p-2 border border-[#b2cbd3] truncate w-fit'>{completedExamId.includes(exam?.id) ? 'Completed' : 'Not Completed'}</div>
-                                                        </div>
+                                                        {/* <div> */}
+                                                        {/* <div className='text-[#5a767f] font-semibold text-xs bg-[#e0e8eb] rounded-md p-2 border border-[#b2cbd3] truncate w-fit'>{completedExamId.includes(exam?.id) ? 'Completed' : 'Not Completed'}</div>
+                                                        </div> */}
+                                                        {completedExamId.includes(exam?.id) ?
+                                                            <div className="flex gap-1 text-sm bg-green-200 p-1 px-2 rounded-md w-fit items-center justify-center text-green-600 border border-green-600">
+                                                                <h1 className="">Completed</h1>
+                                                            </div>:
+                                                            <div className="flex gap-1 text-sm bg-red-200 p-1 px-2 rounded-md w-fit items-center justify-center text-red-600 border border-red-600">
+                                                                <h1 className="text-nowrap">Not Completed</h1>
+                                                            </div>
+                                                        }
                                                     </div>
                                                     <h2 className="font-bold text-[#3f454c] sm:text-lg text-md ">{exam.name}</h2>
                                                     <Link to={`/student/dashboard/course/${courseid}/exam/${exam.id}`}>
