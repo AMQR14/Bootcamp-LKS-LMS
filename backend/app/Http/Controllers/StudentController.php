@@ -182,11 +182,19 @@ class StudentController extends Controller
     public function examData(Request $request, string $id)
     {
         $exams = [];
+
         //Cek answer dari siswa (kalau udah ada answer HARUSNY sudah selesai examnya well harusnya)
-        $examId = Student::with(['answer.question','answer_mul.question'])
-        ->whereHas('answer.question')
-        ->orWhereHas('answer_mul.question')
-        ->find($id);
+        $examId = Student::with('answer.question', 'answer_mul.question')
+        ->where(function ($query) {
+            $query->whereHas('answer.question')
+                  ->orWhereHas('answer_mul.question');
+        })
+        ->find($id);   
+
+        // $examId = Student::with('answer.question','answer_mul.question')
+        // ->whereHas('answer.question')
+        // ->orWhereHas('answer_mul.question')
+        // ->find($id);
 
         if($examId != null){
             foreach ($examId->answer as $key => $value) {
@@ -196,14 +204,17 @@ class StudentController extends Controller
             foreach ($examId->answer_mul as $key => $value) {
                 $exams[] = $value->question->exam_id ; // ambil exam idnya
             }
-        }
+        
 
-        $exams = Exam::whereIn('id', $exams)->get(); // ambil data exam
+            $exams = Exam::whereIn('id', $exams)->get(); // ambil data exam
+            // dd($exams);
+            
+        }
 
         return response()->json([
             'success'=> true,
             'message'=> 'Success',
-            'answer'=> $exams,
+            'completed'=> $exams,
         ]);
 
     }

@@ -61,7 +61,7 @@ class ExamController extends Controller
      */
     public function show(string $id)
     {
-        $exam = Exam::with('question.multipleChoice', 'course.workshop.students', 'course.teacher_course.teacher')->find($id);
+        $exam = Exam::with('question.multipleChoice', 'course.workshop.students.answer.question', 'course.workshop.students.answer_mul.question', 'course.teacher_course.teacher')->find($id);
 
         if(!$exam){
             return response()->json([
