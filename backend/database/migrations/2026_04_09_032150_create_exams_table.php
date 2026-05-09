@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('course_id')->constrained()->cascadeOnDelete();
             $table->string('name');
+            $table->integer('multiple_choice_points');
             $table->time('start_time');
             $table->time('end_time');
             $table->timestamps();

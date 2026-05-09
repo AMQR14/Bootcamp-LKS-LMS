@@ -13,7 +13,9 @@ class Exam extends Model
         'course_id',
         'name',
         'start_time',
-        'end_time'
+        'end_time',
+        'essays_points',
+        'multiple_choices_points',
     ];
 
     public function question(): HasMany

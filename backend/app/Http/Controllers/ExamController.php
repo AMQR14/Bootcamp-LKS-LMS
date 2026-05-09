@@ -15,8 +15,6 @@ class ExamController extends Controller
         $exams = Exam::all();
         $exams = Exam::with('question.multipleChoice', 'course.workshop')->get();
         
-        
-
         return response()->json([
             'success'=> true,
             'message'=> 'Success',
@@ -95,7 +93,9 @@ class ExamController extends Controller
             'name'=> 'required',
             'start_time'=> 'required|date_format:H:i:s',
             'end_time'=> 'required|date_format:H:i:s',
-            'course_id'=> 'required'
+            'course_id'=> 'required',
+            'essays_points'=> 'required',
+            'multiple_choices_points'=> 'required'
         ]);
 
         try{
@@ -103,7 +103,9 @@ class ExamController extends Controller
                 'name'=> $request->name,
                 'start_time'=> $request->start_time,
                 'end_time'=> $request->end_time,
-                'course_id'=> $request->course_id
+                'course_id'=> $request->course_id,
+                'essays_points'=> $request->essays_points,
+                'multiple_choices_points'=> $request->multiple_choices_points
             ]);
             return response()->json([
                 'success'=> true,

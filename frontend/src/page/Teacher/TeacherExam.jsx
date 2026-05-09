@@ -12,7 +12,6 @@ export default function TeacherExam(){
     const [finished, setFinished] = useState()
     const [search, setSearch] = useState('')
 
-
     //Flatmap all the data on one array
 
     // const fin = [
@@ -25,7 +24,7 @@ export default function TeacherExam(){
     const answer = students.map(student => [
         ...student.answer.filter(val => val.question?.exam_id == examid),
         ...student.answer_mul.filter(val => val.question?.exam_id == examid)
-      ]);   
+    ]);   
 
     // console.log(answer)
 

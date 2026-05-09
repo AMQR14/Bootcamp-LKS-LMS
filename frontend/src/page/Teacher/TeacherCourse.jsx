@@ -10,12 +10,13 @@ export default function TeacherCourse(){
         name: '',
         course_id: '',
         start_time: '',
-        end_start_time: ''
+        end_start_time: '',
     })
     const [error, setError] = useState({}) 
     const [loading, setLoading] = useState(false) 
     const [courses, setCourses] = useState('')
     const [exams, setExams] = useState([])
+    const [students, setStudents] = useState([])
     const {courseid} = useParams()
     const [opened, setOpened] = useState(false)
     const [edited, setEdited] = useState(false)
@@ -26,23 +27,31 @@ export default function TeacherCourse(){
         setLoading(true)
         try{
             const res = await api.get(`/courses/${courseid}`)
+            setStudents(res.data.course.workshop.students)
             setCourses(res.data.course)
             setExams(res.data.course.exam)
-            console.log(res.data.course.exam)
+            console.log(res.data.course)
         }finally{
             setLoading(false)
         }
     }
 
     useEffect(()=>{
+        // if(students){
+        //     console.log(students)
+        // }
+
         fetchExam();
     },[])
+
+    const answer = students.map(student => [
+        ...student.answer.filter(val => val.question?.exam_id == examid),
+        ...student.answer_mul.filter(val => val.question?.exam_id == examid)
+    ]);   
 
     const open = () => {
         setOpened(!opened)
     }
-
-    console.log(opened)
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -111,7 +120,7 @@ export default function TeacherCourse(){
                 end_time:form.end_time
             })
             edit()
-            location.reload()
+            fetchExam()
         }catch(err){
             if(err.response.status == 422){
                 setError(err.response.data.errors)
@@ -120,6 +129,7 @@ export default function TeacherCourse(){
             setSaving(false)
         }
     }
+
 
     return (
         <>
@@ -230,14 +240,24 @@ export default function TeacherCourse(){
                                                                     <div className="flex h-full w-2 items-center justify-center">
                                                                         <div className="w-[0.8px] h-4 bg-green-400"></div>
                                                                     </div>
-                                                                    <p className="flex items-center">200 <User className="size-5"/></p>
+                                                                    <p className="flex items-center">
+                                                                        {students.map(student => [
+                                                                                ...student.answer.filter(val => val.question?.exam_id == exam.id),
+                                                                                ...student.answer_mul.filter(val => val.question?.exam_id == exam.id)
+                                                                            ]).filter(e=> e.length != 0).length   
+                                                                        } <User className="size-5"/></p>
                                                                 </div>
                                                                 <div className="flex gap-1 text-sm bg-red-200 p-1 px-2 rounded-md w-fit items-center justify-center text-red-600 border border-red-600">
                                                                     <h1 className="text-nowrap">Not Finished</h1>
                                                                     <div className="flex h-full w-2 items-center justify-center">
                                                                         <div className="w-[0.8px] h-4 bg-red-400"></div>
                                                                     </div>
-                                                                    <p className="flex items-center">200 <User className="size-5"/></p>
+                                                                    <p className="flex items-center">
+                                                                        {students.map(student => [
+                                                                                ...student.answer.filter(val => val.question?.exam_id == exam.id),
+                                                                                ...student.answer_mul.filter(val => val.question?.exam_id == exam.id)
+                                                                            ]).filter(e=> e.length == 0).length   
+                                                                        } <User className="size-5"/></p>
                                                                 </div>
                                                             </div>
                                                         </div>

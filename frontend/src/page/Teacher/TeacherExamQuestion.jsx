@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom"
 import TeacherDashboardLayout from "../../layouts/TeacherDashboardLayout"
-import { Edit, MoveLeft, Plus, Trash, X } from "lucide-react"
+import { Edit, Edit2, MoveLeft, Plus, Trash, X } from "lucide-react"
 import {Link} from 'react-router-dom' 
 import { useEffect, useState } from "react"
 import api from '../../lib/api'
@@ -11,6 +11,7 @@ export default function TeacherExamQuestion(){
     const [loading, setLoading] = useState(false)
     const {courseid, examid} = useParams()
     const [examName, setExamName] = useState('')
+    const [exam, setExam] = useState([])
     const [error, setError] = useState({})
     const [checked, setChecked] = useState('mul-choice')
     const navigate = useNavigate();
@@ -27,10 +28,38 @@ export default function TeacherExamQuestion(){
         exam_id: '',
         question_id: ''
     })
+    const [formMulEdit, setFormMulEdit] = useState({
+        choice_text: ['', '', '', ''], 
+        is_correct: 0,              
+        exam_id: '',
+        question_id: ''
+    })
     const [mult, setMult] = useState([])
     const [checkedEdit, setCheckedEdit] = useState('')
     const [saving, setSaving] = useState(false)
+    const [value, setValue] = useState(1)
+    const [valueMul, setValueMul] = useState(1)
+    const [currentValue, setCurrentValue] = useState('')
 
+    async function postPoints(e) {
+        e.preventDefault()
+        setLoading(true)
+        try{
+
+            await api.put(`/exams/${examid}`, {
+                name: exam.name,
+                start_time: exam.start_time,
+                end_time: exam.start_time,
+                course_id:courseid, 
+                essays_points: value,
+                multiple_choices_points: valueMul,
+            })
+
+        }finally{
+            setLoading(false)
+        }
+    }
+    
     const open = () => {
         setOpened(!opened)
     }
@@ -40,8 +69,11 @@ export default function TeacherExamQuestion(){
         setLoading(true)
         try{
             const res = await api.get(`/exams/${examid}`)
+            setExam(res.data.exam)
             setExamName(res.data.exam.name)
             setQuestions(res.data.exam.question)
+            setValue(res.data.exam.essays_points)        
+            setValueMul(res.data.exam.multiple_choices_points)  
         }finally{
             setLoading(false)
         }
@@ -85,7 +117,6 @@ export default function TeacherExamQuestion(){
                 )
             }
             open()
-            // fetchQuestion()
             location.reload()
         }catch(err){
             if(err.response?.status === 422){
@@ -130,7 +161,7 @@ export default function TeacherExamQuestion(){
                 const choices = question.multiple_choice
                 setMult(choices)
                 setCheckedEdit('mul-choice')
-                setFormMul({
+                setFormMulEdit({
                     choice_text: choices.map(c => c.choice_text),
                     is_correct: choices.findIndex(c => c.is_correct === 1),
                     exam_id: question.exam_id,
@@ -164,10 +195,10 @@ export default function TeacherExamQuestion(){
                 {console.log(form)}
                 {form.multiple_choice?.length == 0 ?                     
                     await Promise.all(
-                        formMul.choice_text.map((choice, index) =>
+                        formMulEdit.choice_text.map((choice, index) =>
                             api.post(`/multiplechoices`, {
                                 choice_text: choice,
-                                is_correct: index === formMul.is_correct ? 1 : 0,
+                                is_correct: index === formMulEdit.is_correct ? 1 : 0,
                                 question_id: questionid
                                 
                             })
@@ -175,10 +206,10 @@ export default function TeacherExamQuestion(){
                     )
                 :
                     await Promise.all(
-                        formMul.choice_text.map((choice, index) =>
+                        formMulEdit.choice_text.map((choice, index) =>
                             api.put(`/multiplechoices/${mult[index].id}`, {
                                 choice_text: choice,
-                                is_correct: index === formMul.is_correct ? 1 : 0,
+                                is_correct: index === formMulEdit.is_correct ? 1 : 0,
                                 question_id: questionid
                                 
                             })
@@ -196,7 +227,7 @@ export default function TeacherExamQuestion(){
             }
 
             edit()
-            location.reload()
+            fetchQuestion()
         } catch(err) {
             if(err.response.status === 422){
                 setError(err.response.data.errors)
@@ -206,6 +237,42 @@ export default function TeacherExamQuestion(){
         }
     }
 
+
+
+    //
+
+
+    const handleValue = (e) => {
+        const firstValue = e.target.value
+
+        const fixed = Math.min(100, Math.max(1, Number(firstValue)))
+
+        setValue(fixed)
+    }
+
+    const  handleValueMul = (e) => {
+        const firstValue = e.target.value
+
+        const fixed = Math.min(100, Math.max(1, Number(firstValue)))
+
+        setValueMul(fixed)
+    }
+
+    const essay = questions.filter(e => e.multiple_choice == 0)
+    // console.log(essay)
+
+    const multiple_choice = questions.filter(e => e.multiple_choice != 0)
+    // console.log(multiple_choice)
+
+    const allEssayPoints = essay.length * value
+    // console.log(allEssayPoints)
+
+    const allMulPoints = multiple_choice.length * valueMul
+    // console.log(allMulPoints)
+
+    const allCurrentPoints = allEssayPoints + allMulPoints
+    // console.log(allCurrentPoints)
+
     return (
         <>
             <TeacherDashboardLayout>
@@ -213,16 +280,17 @@ export default function TeacherExamQuestion(){
                     {opened == false ? '' :
                         <ModelBox>
                             <form action="" className='text-[#3f454c]' onSubmit={handleSubmit}>
-                                {console.log(formMul.is_correct)}
                                     <div className="flex justify-end" onClick={()=> open()}>
                                         <X className=""/>
                                     </div>
                                     <div className='flex flex-col justify-center gap-5'>
-                                        <div className='flex flex-col gap-2'>
-                                            <label htmlFor="" className='font-bold'>Question:</label>
-                                            <textarea type="text" placeholder='Enter question' className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]'
-                                            onChange={e => setForm({...form, question:e.target.value})}/>
-                                            {error.question && <p className='text-red-500'>{error.question[0]}</p>}
+                                        <div className="flex flex-col gap-2">
+                                            <div className='flex flex-col gap-2'>
+                                                <label htmlFor="" className='font-bold'>Question:</label>
+                                                <textarea type="text" placeholder='Enter question' className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]'
+                                                onChange={e => setForm({...form, question:e.target.value})}/>
+                                                {error.question && <p className='text-red-500'>{error.question[0]}</p>}
+                                            </div>
                                         </div>
                                         <div className=' flex gap-6'>
                                             <div className='flex gap-1'>
@@ -304,14 +372,14 @@ export default function TeacherExamQuestion(){
                                                                 type="radio"
                                                                 name='correct-answer'
                                                                 value={index}
-                                                                checked={formMul.is_correct === index}
-                                                                onChange={() => setFormMul({...formMul, is_correct: index})}
+                                                                checked={formMulEdit.is_correct === index}
+                                                                onChange={() => setFormMulEdit({...formMulEdit, is_correct: index})}
                                                             />
                                                             <input
                                                                 type="text"
                                                                 className='w-full outline-none'
                                                                 placeholder={`Enter choice ${index + 1}`}
-                                                                value={formMul.choice_text[index]}
+                                                                value={formMulEdit.choice_text[index]}
                                                                 onChange={e => handleChoiceChange(index, e.target.value)}
                                                             />
                                                         </div>
@@ -341,8 +409,27 @@ export default function TeacherExamQuestion(){
                         :
                             <div>
                                 <div className="flex w-full gap-4">
-                                    <div className="border border-gray-300 w-full bg-gray-100 rounded-md flex items-center">
-                                        <h1 className="ml-4 font-semibold text-[#3f454c]">{examName}</h1>
+                                    <div className="border border-gray-300 w-full h-full p-2 bg-gray-100 rounded-md flex items-center justify-between flex-row overflow-auto">
+                                        <h1 className="ml-4 font-semibold text-[#3f454c] text-nowrap">{examName}</h1>
+                                        <form className="flex mx-4 flex-row gap-3" onSubmit={postPoints}>
+                                            <div className="flex items-center gap-2 flex-row">
+                                                <label htmlFor="" className="font-semibold text-sm text-[#3f454c] text-nowrap">Essay Points:</label>
+                                                <input type="number" min={1} max={100} className="p-2 h-8 w-fit border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]" value={value} onChange={handleValue}/>
+                                            </div>
+                                            <div className="flex items-center gap-2 flex-row ">
+                                                <label htmlFor="" className="font-semibold text-sm text-[#3f454c] text-nowrap">Multiple Choice Points:</label>
+                                                <input type="number" min={1} max={100} className="p-2 h-8 w-fit border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]" value={valueMul} onChange={handleValueMul}/>
+                                            </div>
+                                            <div className="flex items-center gap-2 flex-row ">
+                                                <label htmlFor="" className="font-semibold text-sm text-[#3f454c] text-nowrap">Current Point:</label>
+                                                <div className="p-2 h-8 w-18 border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f] flex items-center">
+                                                    <p className="">{allCurrentPoints}</p>
+                                                </div>
+                                            </div>
+                                            <button className="bg-[#60848f] hover:bg-[#76a0ad] max-h-10 transition-all p-1 px-2 text-white rounded-md text-sm font-semibold">
+                                                <Edit2 className="size-5"/>
+                                            </button>
+                                        </form>
                                     </div>
                                     
                                     <div className='flex justify-end gap-2'>
@@ -355,6 +442,9 @@ export default function TeacherExamQuestion(){
                                 <div className="my-4 min-h-screen gap-4 flex flex-col">
                                     {questions.map((question, index)=>(
                                         <div className="group/question  border border-gray-300 bg-gray-100 rounded-md h-full" key={question.id}>
+                                            <div className="m-0 text-sm flex items-center mr-3 translate-y-1 text-red-500 justify-end">
+                                                <div className="m-0">{question.multiple_choice.length == 0 ? value : valueMul}*</div>
+                                            </div>
                                             <div className="flex gap-2 w-full h-full p-3 text-[#3f454c]">
                                                 <div className="flex items-center justify-between flex-col gap-2">
                                                     <h1 className="bg-gray-50 border border-gray-300 w-8 h-8 flex items-center justify-center rounded-md font-semibold text-[#3f454c]">{index + 1}</h1>
