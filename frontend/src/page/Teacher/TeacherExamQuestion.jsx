@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom"
 import TeacherDashboardLayout from "../../layouts/TeacherDashboardLayout"
-import { Edit, Edit2, MoveLeft, Plus, Trash, X } from "lucide-react"
-import {Link} from 'react-router-dom' 
+import { Edit, Edit2, MoveLeft, Plus, Save, Trash, X } from "lucide-react"
+import {Link, useBlocker} from 'react-router-dom' 
 import { useEffect, useState } from "react"
 import api from '../../lib/api'
 import ModelBox from "../../components/ModelBox"
@@ -39,21 +39,28 @@ export default function TeacherExamQuestion(){
     const [saving, setSaving] = useState(false)
     const [value, setValue] = useState(1)
     const [valueMul, setValueMul] = useState(1)
-    const [currentValue, setCurrentValue] = useState('')
+    const [currentValue, setCurrentValue] = useState()
 
     async function postPoints(e) {
         e.preventDefault()
         setLoading(true)
         try{
+            if(allCurrentPoints == 100){
+                await api.put(`/exams/${examid}`, {
+                    name: exam.name,
+                    start_time: exam.start_time,
+                    end_time: exam.start_time,
+                    course_id:courseid, 
+                    essays_points: value,
+                    multiple_choices_points: valueMul,
+                })
 
-            await api.put(`/exams/${examid}`, {
-                name: exam.name,
-                start_time: exam.start_time,
-                end_time: exam.start_time,
-                course_id:courseid, 
-                essays_points: value,
-                multiple_choices_points: valueMul,
-            })
+                setError([])
+
+                fetchQuestion()
+            }else{
+                setError(['The Current must be 100'])
+            }
 
         }finally{
             setLoading(false)
@@ -236,12 +243,7 @@ export default function TeacherExamQuestion(){
             setSaving(false)
         }
     }
-
-
-
-    //
-
-
+    
     const handleValue = (e) => {
         const firstValue = e.target.value
 
@@ -403,7 +405,7 @@ export default function TeacherExamQuestion(){
                     }
                 </div>
                 <main className="flex">
-                    <div className="m-8 md:mx-20  w-full">
+                    <div className="m-8 md:mx-20 w-full">
                         {loading ?
                             <div className="flex mt-15 justify-center items-center"> <div className="w-30 h-30 bg-white border-b-6 border-r-6 border-[#a3bac2] rounded-full animate-spin"></div> </div>
                         :
@@ -435,11 +437,17 @@ export default function TeacherExamQuestion(){
                                     <div className='flex justify-end gap-2'>
                                         <Link to={`/teacher/dashboard/course/${courseid}/exam/${examid}`} className='flex justify-center items-center w-14 h-12 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md '><MoveLeft className='size-7 stroke-2'/></Link>
                                     </div>
-                                    {/* <div className='flex justify-end gap-2'>
-                                        <button className='flex justify-center items-center w-24 h-10 bg-[#60848f] hover:bg-[#76a0ad] transition-all text-white font-semibold rounded-md ' type="submit" disabled={loading}>{loading? 'Loading...' : 'Save'}</button>
-                                    </div> */}
                                 </div>
                                 <div className="my-4 min-h-screen gap-4 flex flex-col">
+                                    {error && <p className="text-red-500">{error[0]}</p>}
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-gray-400">The number of question must be a multiple of 5</p>
+                                        {questions.length % 5 == 0 ? '' : <p className="text-red-500">*</p>}
+                                        <button className="bg-[#60848f] hover:bg-[#76a0ad]  transition-all p-2 text-white rounded-md font-semibold px-4 flex gap-2 items-center">
+                                            <p>Save</p>
+                                            <Save className="size-5"/>
+                                        </button>
+                                    </div>
                                     {questions.map((question, index)=>(
                                         <div className="group/question  border border-gray-300 bg-gray-100 rounded-md h-full" key={question.id}>
                                             <div className="m-0 text-sm flex items-center mr-3 translate-y-1 text-red-500 justify-end">

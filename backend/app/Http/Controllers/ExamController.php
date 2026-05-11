@@ -94,8 +94,8 @@ class ExamController extends Controller
             'start_time'=> 'required|date_format:H:i:s',
             'end_time'=> 'required|date_format:H:i:s',
             'course_id'=> 'required',
-            'essays_points'=> 'required',
-            'multiple_choices_points'=> 'required'
+            'essays_points'=> 'required | min:1',
+            'multiple_choices_points'=> 'required | min:1'
         ]);
 
         try{
