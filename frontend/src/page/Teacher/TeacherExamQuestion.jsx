@@ -40,6 +40,8 @@ export default function TeacherExamQuestion(){
     const [value, setValue] = useState(1)
     const [valueMul, setValueMul] = useState(1)
     const [currentValue, setCurrentValue] = useState()
+    const [clientQuestion, setClientQuestion] = useState([])
+
 
     async function postPoints(e) {
         e.preventDefault()
@@ -81,6 +83,8 @@ export default function TeacherExamQuestion(){
             setQuestions(res.data.exam.question)
             setValue(res.data.exam.essays_points)        
             setValueMul(res.data.exam.multiple_choices_points)  
+
+            setClientQuestion(res.data.exam.question)
         }finally{
             setLoading(false)
         }
@@ -101,38 +105,36 @@ export default function TeacherExamQuestion(){
     }
 
     async function handleSubmit(e) {
-        e.preventDefault()
-        setError({})
-        setLoading(true)
-        try{
-        
-            const res = await api.post('/questions', {
-                question: form.question,
-                exam_id: examid
-            })
-            const newQuestionId = res.data.question.id
-            
-            if (checked === 'mul-choice'){
-                await Promise.all(
-                    formMul.choice_text.map((choice, index) =>
-                        api.post('/multiplechoices', {
-                            choice_text: choice,
-                            is_correct: index === formMul.is_correct ? 1 : 0,
-                            question_id: newQuestionId
-                        })
-                    )
-                )
-            }
-            open()
-            location.reload()
-        }catch(err){
-            if(err.response?.status === 422){
-                setError(err.response.data.errors)
-            }
-        }finally{
-            setLoading(false)
+        e.preventDefault();
+        setError({});
+        setLoading(true);        
+      
+        try {
+          const multipleChoices = checked === 'mul-choice'
+            ? formMul.choice_text.map((choice, index) => ({
+                choice_text: choice,
+                is_correct: index === formMul.is_correct ? 1 : 0,
+              }))
+            : [];
+      
+          const newClientQuestion = {
+            question: form.question,
+            exam_id: examid,
+            multiple_choice: multipleChoices,
+          };
+      
+          setClientQuestion((questions) => [...questions, newClientQuestion]);
+          console.log(clientQuestion)
+      
+          open();
+        } catch (err) {
+          if (err.response?.status === 422) {
+            setError(err.response.data.errors);
+          }
+        } finally {
+          setLoading(false);
         }
-    }
+      }   
     
     async function handleDelete(id) {
         setLoading(true)
@@ -274,6 +276,79 @@ export default function TeacherExamQuestion(){
 
     const allCurrentPoints = allEssayPoints + allMulPoints
     // console.log(allCurrentPoints)
+
+    async function saveChanges() {
+        setLoading(true)
+        try{
+            //Submit
+            const res = await api.post('/questions', {
+                question: form.question,
+                exam_id: examid
+            })
+            
+            const newQuestionId = res.data.question.id
+            
+            if (checked === 'mul-choice'){
+                await Promise.all(
+                    formMul.choice_text.map((choice, index) =>
+                        api.post('/multiplechoices', {
+                            choice_text: choice,
+                            is_correct: index === formMul.is_correct ? 1 : 0,
+                            question_id: newQuestionId
+                        })
+                    )
+                )
+            }
+
+            //Edit
+            // await api.put(`/questions/${questionid}`, {
+            //     question: form.question,
+            //     exam_id: examid
+            // })
+
+            // if (checkedEdit === 'mul-choice') {
+            //     {console.log(form)}
+            //     {form.multiple_choice?.length == 0 ?                     
+            //         await Promise.all(
+            //             formMulEdit.choice_text.map((choice, index) =>
+            //                 api.post(`/multiplechoices`, {
+            //                     choice_text: choice,
+            //                     is_correct: index === formMulEdit.is_correct ? 1 : 0,
+            //                     question_id: questionid
+                                
+            //                 })
+            //             )
+            //         )
+            //     :
+            //         await Promise.all(
+            //             formMulEdit.choice_text.map((choice, index) =>
+            //                 api.put(`/multiplechoices/${mult[index].id}`, {
+            //                     choice_text: choice,
+            //                     is_correct: index === formMulEdit.is_correct ? 1 : 0,
+            //                     question_id: questionid
+                                
+            //                 })
+            //             )
+            //         )
+            //     }
+                
+            // } else if (checkedEdit === 'essay' && mult.length > 0) {
+            //     await Promise.all(
+            //         mult.map(choice =>
+            //             api.delete(`/multiplechoices/${choice.id}`)
+            //         )
+                    
+            //     )
+            // }
+
+            //Delete
+            await api.delete(`/questions/${id}`)
+
+            location.reload()
+        }finally{
+            setLoading(false)
+        }
+    }
 
     return (
         <>
@@ -441,14 +516,16 @@ export default function TeacherExamQuestion(){
                                 <div className="my-4 min-h-screen gap-4 flex flex-col">
                                     {error && <p className="text-red-500">{error[0]}</p>}
                                     <div className="flex items-center justify-between">
-                                        <p className="text-gray-400">The number of question must be a multiple of 5</p>
-                                        {questions.length % 5 == 0 ? '' : <p className="text-red-500">*</p>}
-                                        <button className="bg-[#60848f] hover:bg-[#76a0ad]  transition-all p-2 text-white rounded-md font-semibold px-4 flex gap-2 items-center">
+                                        <div className="flex gap-1">
+                                            <p className="text-gray-400">The number of question must be a multiple of 5</p>
+                                            {questions.length % 5 == 0 ? '' : <p className="text-red-500">*</p>}
+                                        </div>
+                                        <button className="bg-[#60848f] hover:bg-[#76a0ad]  transition-all p-2 text-white rounded-md font-semibold px-4 flex gap-2 items-center" onClick={()=> saveChanges()}>
                                             <p>Save</p>
                                             <Save className="size-5"/>
                                         </button>
                                     </div>
-                                    {questions.map((question, index)=>(
+                                    {clientQuestion.map((question, index)=>(
                                         <div className="group/question  border border-gray-300 bg-gray-100 rounded-md h-full" key={question.id}>
                                             <div className="m-0 text-sm flex items-center mr-3 translate-y-1 text-red-500 justify-end">
                                                 <div className="m-0">{question.multiple_choice.length == 0 ? value : valueMul}*</div>
