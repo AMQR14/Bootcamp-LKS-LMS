@@ -7,6 +7,7 @@ use App\Models\Student;
 use App\Models\User;
 use App\Models\Workshop;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class StudentController extends Controller
 {
@@ -118,7 +119,17 @@ class StudentController extends Controller
             'email' => 'required|email|unique:students,email,' . $student->id,
             'date_of_birth' => 'required|date',
             'workshop_id' => 'required',
+            'profile_picture' => 'nullable|image|max:2048',
         ]);
+
+        $fileName = $student->profile_picture; // keep old picture by default
+
+        if($request->hasFile('profile_picture')){
+            $ext = $request->file('profile_picture')->getClientOriginalExtension();
+            $fileName = 'IMG_' . Str::uuid() . '.' . $ext;
+            $request->file('profile_picture')
+            ->storeAs('', $fileName, 'public');
+        }
 
         try{
             $student->update([
@@ -129,7 +140,7 @@ class StudentController extends Controller
                 'email' => $request->email,
                 'date_of_birth' => $request->date_of_birth,
                 'workshop_id' => $request->workshop_id,
-                'joined_at' => now(),
+                'profile_picture' => $fileName,
             ]);
 
             $student->user()->update([
@@ -139,12 +150,13 @@ class StudentController extends Controller
             return response()->json([
                 'success'=> true,
                 'message'=> 'Student updated',
-                'students'=> $student,
+                'student'=> $student,
             ]);
         }catch(\Exception $e){
             return response()->json([
                 'success'=> false,
                 'message'=> 'Student failed to be updated',
+                'error'=> $e->getMessage(),
             ], 500);
         }
     }

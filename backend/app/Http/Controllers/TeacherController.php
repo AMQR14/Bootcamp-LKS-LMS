@@ -6,6 +6,7 @@ use App\Models\Teacher;
 use App\Models\TeacherCourse;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class TeacherController extends Controller
 {
@@ -127,7 +128,17 @@ class TeacherController extends Controller
             'nidn' => 'required',
             'email' => 'required|email|unique:teachers,email,' . $teacher->id,   
             'date_of_birth' => 'required|date',
+            'profile_picture' => 'nullable|image|max:2048',
         ]);
+
+        $fileName = $request->profile_picture;
+
+        if($request->hasFile('profile_picture')){
+            $ext = $request->file('profile_picture')->getClientOriginalExtension();
+            $fileName = 'IMG_' . Str::uuid('') . '.' .$ext;
+
+            $request->file('profile_picture')->storeAs('', $fileName, 'public');
+        }
 
         try{
             $teacher->update([
@@ -138,6 +149,7 @@ class TeacherController extends Controller
                 'email' => $request->email,
                 'date_of_birth' => $request->date_of_birth,
                 'workshop_id' => $request->workshop_id,
+                'profile_picture' => $fileName,
             ]);
 
             $teacher->user()->update([

@@ -14,7 +14,6 @@ class AuthController extends Controller
                 'message'=> 'Invalid credentials'
             ], 401);
         }
-       
 
         $user = Auth::user();
 

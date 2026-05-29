@@ -15,60 +15,90 @@ export default function TeacherProfile(){
         nik: '',
         date_of_birth: '',
         workshop_id: '',
-        // password: '',
-        role: 'student',
+        role: 'teacher',
+        profile_picture: '',
     })
 
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
     const [error, setError] = useState({})
     const [userid, setUserid] = useState('')
+    const [preview, setPreview] = useState(null)
+    const [formData, setFormData] = useState(null)
     const [id, setId] = useState('')
     const navigate = useNavigate()
     const {user} = useAuth()
+    const BASE_URL = import.meta.env.VITE_API_URL
 
     useEffect(()=>{
         async function fetchUser() {
             setId(user.user.id)
             try{
-                const res = await api.get(`/users/${id}`)
-                setUserid(res.data.user?.teacher.id)
+                const res = await api.get(`/users/${user.user.id}`)
+
+                if(res.data.user.teacher?.profile_picture){
+                    localStorage.setItem('profile_picture', `${res.data.user.teacher.pfp}`)
+                }
+                
+                setUserid(res.data.user.teacher.id)
                 setForm(res.data.user.teacher)
-                // console.log(res.data.user.teacher)    
+                console.log(res.data.user.teacher.pfp)
+
+                if(res.data.user.teacher.profile_picture){
+                    setPreview(`${res.data.user.teacher.pfp}`)
+                }
             }finally{
                 setLoading(false)
             }
         }
         fetchUser()
-    }, [userid, id])
+    }, [])
 
+    function handleFileChange(e) {
+        const file = e.target.files[0]
+        if (file) {
+            setFormData(file)
+            setPreview(URL.createObjectURL(file))
+        }
+    }
 
     async function handleSubmit(e) {
         e.preventDefault()
         setError({})
         setSaving(true)
+
+
+        const data = new FormData()
+        data.append('_method', 'PUT')
+        data.append('name', form.name)
+        data.append('email', form.email)
+        data.append('nip', form.nis)
+        data.append('nidn', form.nisn)
+        data.append('nik', form.nik)
+        data.append('date_of_birth', form.date_of_birth)
+        data.append('workshop_id', form.workshop_id)
+        data.append('role', form.role)
+        if (formData) data.append('profile_picture', formData)
+
         try{
-            console.log(userid)
-            await api.put(`/teachers/${userid}`, {
-                name: form.name,
-                email: form.email,
-                nip: form.nip,
-                nidn: form.nidn,
-                nik: form.nik,
-                date_of_birth: form.date_of_birth,
-                workshop_id: form.workshop_id,
-                // password: form.password,
-                role: form.role,
+            await api.post(`/teachers/${userid}`, data, {
+                headers: { 'Content-Type': 'multipart/form-data' }
             })
             location.reload()
         }catch(err){
-            if(err.response.status == 422){
+            if(err.response?.status === 422){
                 setError(err.response.data.errors)
             }
         }finally{
             setSaving(false)
         }
     }
+
+    const profilePicSrc = preview 
+        ? preview 
+        : form.profile_picture 
+            ? `${BASE_URL}/storage/profile_pictures/${form.profile_picture}` 
+            : null
 
     return (
         <TeacherDashboardLayout>
@@ -78,13 +108,21 @@ export default function TeacherProfile(){
                         <div className='my-6 text-[#3f454c] flex flex-col lg:flex-row gap-x-8 gap-y-8'>
                             <form action="" className='p-4 rounded-xl shadow-md h-full w-full lg:w-190' onSubmit={handleSubmit}>
                                 <div className='flex flex-col justify-center gap-5'>
-                                    <div className='flex flex-col gap-3'>
-                                        <label htmlFor="" className='font-bold'>Profile Picture:</label>
                                         <div className='flex gap-8 items-center flex-col sm:flex-row'>
-                                            <div className='w-27 h-27 bg-gray-300 rounded-full'></div>
-                                            <input type="file" className="block text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary-500 file:text-white hover:file:bg-[#7098a4] file:transition-all file:bg-[#60848f]" />   
+                                            <div className='w-27 h-27 bg-gray-300 rounded-full overflow-hidden flex items-center justify-center'>
+                                                {profilePicSrc 
+                                                    ? <img src={profilePicSrc} alt="Profile" className="w-full h-full object-cover" />
+                                                    : <span className='text-gray-500 text-xs'>No Photo</span>
+                                                }
+                                            </div>
+                                            <input 
+                                                type="file" 
+                                                accept="image/*"
+                                                className="block text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:text-white file:transition-all file:bg-[#60848f] hover:file:bg-[#7098a4]" 
+                                                onChange={handleFileChange}
+                                            />
+                                            {error.profile_picture && <p className='text-red-500'>{error.profile_picture[0]}</p>}
                                         </div>
-                                    </div>
                                     <div className='flex flex-col gap-2'>
                                         <label htmlFor="" className='font-bold'>Name:</label>
                                         <input type="text" value={loading? 'Loading...' : form.name} placeholder='Enter email' className='p-2 w-full border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]' onChange={e => setForm({...form, name:e.target.value})}/>

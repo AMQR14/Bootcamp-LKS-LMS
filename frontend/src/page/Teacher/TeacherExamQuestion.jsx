@@ -37,8 +37,8 @@ export default function TeacherExamQuestion(){
     const [mult, setMult] = useState([])
     const [checkedEdit, setCheckedEdit] = useState('')
     const [saving, setSaving] = useState(false)
-    const [value, setValue] = useState(1)
-    const [valueMul, setValueMul] = useState(1)
+    const [value, setValue] = useState(0)
+    const [valueMul, setValueMul] = useState(0)
     const [currentValue, setCurrentValue] = useState()
     const [clientQuestion, setClientQuestion] = useState([])
 
@@ -249,15 +249,16 @@ export default function TeacherExamQuestion(){
     const handleValue = (e) => {
         const firstValue = e.target.value
 
-        const fixed = Math.min(100, Math.max(1, Number(firstValue)))
+        const fixed = Math.min(100, Math.max(0, Number(firstValue)))
 
         setValue(fixed)
+        
     }
 
     const  handleValueMul = (e) => {
         const firstValue = e.target.value
 
-        const fixed = Math.min(100, Math.max(1, Number(firstValue)))
+        const fixed = Math.min(100, Math.max(0, Number(firstValue)))
 
         setValueMul(fixed)
     }
@@ -491,11 +492,11 @@ export default function TeacherExamQuestion(){
                                         <form className="flex mx-4 flex-row gap-3" onSubmit={postPoints}>
                                             <div className="flex items-center gap-2 flex-row">
                                                 <label htmlFor="" className="font-semibold text-sm text-[#3f454c] text-nowrap">Essay Points:</label>
-                                                <input type="number" min={1} max={100} className="p-2 h-8 w-fit border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]" value={value} onChange={handleValue}/>
+                                                <input type="number" min={0} max={100} className="p-2 h-8 w-fit border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]" value={value} onChange={handleValue}/>
                                             </div>
                                             <div className="flex items-center gap-2 flex-row ">
                                                 <label htmlFor="" className="font-semibold text-sm text-[#3f454c] text-nowrap">Multiple Choice Points:</label>
-                                                <input type="number" min={1} max={100} className="p-2 h-8 w-fit border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]" value={valueMul} onChange={handleValueMul}/>
+                                                <input type="number" min={0} max={100} className="p-2 h-8 w-fit border-2 border-[#E0E8EB] rounded-md hover:border-[#60848f] transition-all focus:outline-none focus:border-[#60848f]" value={valueMul} onChange={handleValueMul}/>
                                             </div>
                                             <div className="flex items-center gap-2 flex-row ">
                                                 <label htmlFor="" className="font-semibold text-sm text-[#3f454c] text-nowrap">Current Point:</label>

@@ -28,8 +28,13 @@ export function AuthProvider({children}){
         localStorage.setItem('token', access_token)
 
         const userRes = await api.get('/user')
-        console.log("aa" + userRes);
+        console.log(userRes);
         setUser(userRes.data)
+
+        if(userRes.data.user != null){
+            localStorage.setItem('profile_picture', userRes.data.user?.student ? userRes.data.user?.student.pfp : userRes.data.user?.teacher.pfp)
+            console.log(userRes.data.user)
+        }
         
         return res.data
     }
@@ -42,6 +47,7 @@ export function AuthProvider({children}){
         }finally{
             setUser(null)
             localStorage.removeItem('token')
+            localStorage.removeItem('profile_picture')
         }
     }
 

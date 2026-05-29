@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 
 class Student extends Model
@@ -18,7 +19,12 @@ class Student extends Model
         'nik',
         'email',
         'date_of_birth',
-        'joined_at'
+        'joined_at',
+        'profile_picture'
+    ];
+
+    protected $appends = [
+        'pfp'
     ];
 
     public function user(): BelongsTo
@@ -39,5 +45,9 @@ class Student extends Model
     public function answer_mul(): HasMany
     {
         return $this->hasMany(AnswerMultipleChoice::class, 'student_id');
+    }
+
+    public function getPfpAttribute() {
+        return Storage::disk('public')->url($this->profile_picture);
     }
 }

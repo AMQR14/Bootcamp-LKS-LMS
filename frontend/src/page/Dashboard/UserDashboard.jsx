@@ -2,25 +2,32 @@ import { useEffect, useState } from 'react'
 import DashboardLayout from '../../layouts/DashboardLayout'
 import {Link} from 'react-router-dom'
 import api from '../../lib/api'
-import { Edit, Plus, Trash } from 'lucide-react'
+import { Edit, MoveLeft, MoveRight, Plus, Trash } from 'lucide-react'
 
 export default function UserDashboard(){
     const [users, setUsers] = useState([])
+    const [lastPage, setLastPage] = useState()
     const [loading, setLoading] = useState(false)
+
+    const [page, setPage]  = useState(1)
 
     async function fetchAllUsers() {
         setLoading(true)
         try{
-            const res = await api.get('/users')
-            setUsers(res.data.users)
+            const res = await api.get(`/users?page=${page}`)
+            setUsers(res.data.users.data)
+            setPage(res.data.users.current_page)
+            setLastPage(res.data.users.last_page)
         }finally{
             setLoading(false)
         }
     }
 
     useEffect(()=>{
-        fetchAllUsers()
-    }, [])
+        if(page){
+            fetchAllUsers()
+        }
+    }, [page])
 
     async function handleDelete(id) {
         try{
@@ -43,7 +50,7 @@ return (
                             </div>
                         </div>
                         {loading ? <div className="flex mt-15 justify-center items-center"> <div className="w-30 h-30 bg-white border-b-6 border-r-6 border-[#a3bac2] rounded-full animate-spin"></div> </div> : users.length == 0 ? <div className='text-[#5a767f] font-semibold text-md bg-[#e0e8eb] mt-6 rounded-xl p-4 border border-[#b2cbd3]'>There is no users</div> :
-                        <div className='my-6 rounded-md border-collapse border-2 overflow-x-auto border-[#A3BAC2]'>
+                        <div className='mt-6 rounded-md border-collapse border-2 overflow-x-auto border-[#A3BAC2]'>
                             <table className='min-w-200 w-full text-[#3f454c]'>
                                 <thead className='text-[#5a767f] bg-[#e0e8eb]'>
                                     <tr >
@@ -73,7 +80,20 @@ return (
                                 </tbody>
                             </table>
                         </div>
-                        }                        
+                        }     
+                        <div className='border-2 mt-2 border-[#A3BAC2] h-10 rounded-md flex w-fit text-[#5a767f] '>
+                            <div className='h-full flex items-center w-fit px-2 bg-[#e0e8eb] hover:bg-[#cdd9de] transition-all' onClick={()=> page > 1 ? setPage(page-1) : ''}>
+                                <MoveLeft/>
+                            </div>
+                            <div className='flex items-center'>
+                                {[...Array(lastPage)].map((e,index)=>(
+                                    <div className={`${page == index+1 ? 'bg-gray-100 font-semibold' : ''}  px-4 hover:bg-gray-100 transition-all h-full flex items-center`} onClick={()=> page != index+1 ? setPage(index+1) : ''}>{index+1}</div>
+                                ))}
+                            </div>
+                            <div className='h-full flex items-center w-fit px-2 bg-[#e0e8eb] hover:bg-[#cdd9de] transition-all ' onClick={()=> setPage(page+1)}>
+                                <MoveRight/>
+                            </div>
+                        </div>                   
                     </div>
                 </main>
         </DashboardLayout>

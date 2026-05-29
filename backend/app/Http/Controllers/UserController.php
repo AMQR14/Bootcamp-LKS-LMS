@@ -13,7 +13,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::paginate(10);
         // $teacher = User::where('role', 'teacher')->get();
         return response()->json([
             'success'=> true,

@@ -1,7 +1,7 @@
 import Navbar2 from "../components/Navbar2"
 import Footer from "../components/Footer"
 import Sidebar from "../components/Sidebar"
-import {User, Book, LayoutDashboard, GraduationCap, Users, CircleQuestionMark, Settings, Clipboard, FileQuestion} from 'lucide-react'
+import {User, Book, LayoutDashboard, GraduationCap, Users, CircleQuestionMark, Settings, Clipboard, FileQuestion, User2} from 'lucide-react'
 import {Link, useLocation, useNavigate, useParams} from 'react-router-dom'
 import { useEffect, useState } from "react"
 import { useAuth } from "../contexts/AuthContext"
@@ -62,7 +62,12 @@ export default function TeacherDashboardLayout({children}){
                             <div className="w-0.5 h-8 bg-[#A3BAC2]"></div>
                             <div className="flex justify-center items-center gap-5">
                                 <h2 className="text-[#3f454c] font-semibold hidden md:block">{loading ? 'loading...' : user.role === 'admin' ? user.email : user.role === 'student' ? user.student?.name?.toUpperCase() : user.teacher?.name?.toUpperCase() }</h2>
-                                <div className="w-11 h-11 rounded-full bg-[#9aa8b7]" onClick={shown}></div>
+                                <div className="w-11 h-11 rounded-full bg-[#9aa8b7] overflow-hidden flex items-center justify-center" onClick={shown}>
+                                    {localStorage.getItem('profile_picture') 
+                                        ? <img src={localStorage.getItem('profile_picture')} alt="Profile" className="w-full h-full object-cover" />
+                                        : <User color="white" size={20}/>
+                                    }
+                                </div>
                             </div>
                         </div> 
                 </div>
