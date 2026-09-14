@@ -13,8 +13,9 @@ class UserController extends Controller
      */
     public function index()
     {
+        $users = User::all();
         $users = User::paginate(10);
-        // $teacher = User::where('role', 'teacher')->get();
+        $teacher = User::where('role', 'teacher')->get();
         return response()->json([
             'success'=> true,
             'message'=> 'Success',
@@ -39,7 +40,7 @@ class UserController extends Controller
                 'password'=> bcrypt($request->email),
                 'role'=> $request->role
             ]);
-    
+
             return response()->json([
                 'success'=> true,
                 'message'=> 'User created',
@@ -51,7 +52,7 @@ class UserController extends Controller
                 'message'=> 'Failed to create user',
             ],500);
         }
-        
+
     }
 
     /**
@@ -107,7 +108,7 @@ class UserController extends Controller
             $user->teacher()->update([
                 'email'=> $request->email,
             ]);
-    
+
             return response()->json([
                 'success'=> true,
                 'message'=> 'User updated',

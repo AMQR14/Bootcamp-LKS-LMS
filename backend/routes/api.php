@@ -24,7 +24,7 @@ Route::prefix('v1')->group(function (){
     Route::apiResource('workshops', WorkshopController::class);
     Route::apiResource('users', UserController::class);
     Route::apiResource('teachers', TeacherController::class);
-    
+
     Route::apiResource('students', StudentController::class);
     Route::get('/exam/completed/{id}', [StudentController::class, 'examData']);
 
@@ -32,17 +32,17 @@ Route::prefix('v1')->group(function (){
     Route::apiResource('exams', ExamController::class);
     Route::apiResource('questions', QuestionController::class);
 
-    Route::apiResource('answers', AnswerController::class); 
+    Route::apiResource('answers', AnswerController::class);
     Route::post('/answer/bulk', [AnswerController::class, 'bulkStore']);
 
-    Route::apiResource('multiplechoices', MultipleChoiceController::class);    
+    Route::apiResource('multiplechoices', MultipleChoiceController::class);
     Route::apiResource('coursefiles', CourseFileController::class);
     Route::apiResource('answer-mul', AnswerMulController::class);
     Route::get('/stats', [StatsController::class, 'index']);
     Route::get('/stats/students-by-year', [StatsController::class, 'studentsByYear']);
 
     Route::apiResource('teacher-courses', TeacherCoursesController::class);
-    
+
     Route::middleware(['auth:sanctum'])->group(function (){
 
         Route::post('/logout', [AuthController::class, 'logout']);

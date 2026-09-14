@@ -42,8 +42,11 @@ class Teacher extends Model
         return $this->hasMany(TeacherCourse::class, 'teacher_id');
     }
 
-    public function getPfpAttribute() {
-        return Storage::disk('public')->url($this->profile_picture);
+    public function getPfpAttribute()
+    {
+        return $this->profile_picture
+            ? Storage::disk('public')->url($this->profile_picture)
+            : null;
     }
 
 }

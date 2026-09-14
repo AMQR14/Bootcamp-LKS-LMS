@@ -17,7 +17,7 @@ class TeacherController extends Controller
     {
         $teachers = Teacher::all();
 
-        $teachers = Teacher::with('workshop')->get();
+        $teachers = Teacher::with('workshop', 'teacher_course.course')->get();
 
         return response()->json([
             'success'=> true,
@@ -155,6 +155,15 @@ class TeacherController extends Controller
             $teacher->user()->update([
                 'email' => $request->email
             ]);
+
+            TeacherCourse::where('teacher_id', $teacher->id)->delete();
+
+            foreach ($request->course_id as $course) {
+                $teachercourse = TeacherCourse::create([
+                    'teacher_id'=> $teacher->id,
+                    'course_id'=> $course
+                ]);
+            }
 
             return response()->json([
                 'success'=> true,
